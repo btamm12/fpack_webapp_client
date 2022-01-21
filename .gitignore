@@ -1,0 +1,5 @@
+# Don't push virtual environment folder.
+venv
+
+# We will create the correct symlink during the installation of the project.
+create_venv.sh

@@ -1,0 +1,13 @@
+{
+    "configurations": [
+        {
+            "name": "(venv) Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "cwd": "${fileDirname}",
+            "python": "${workspaceFolder}/src/asr/venv/Scripts/python"
+        }
+    ]
+}

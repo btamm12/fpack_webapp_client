@@ -1,0 +1,1 @@
+../../common/dev/vscode_extensions/install_extensions.sh

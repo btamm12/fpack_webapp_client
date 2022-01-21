@@ -1,0 +1,8 @@
+eamodio.gitlens
+gruntfuggly.todo-tree
+ms-python.python
+ms-vsliveshare.vsliveshare
+natqe.reload
+njpwerner.autodocstring
+stkb.rewrap
+tomoki1207.pdf

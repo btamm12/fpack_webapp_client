@@ -1,0 +1,32 @@
+{
+    "[python]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 4
+    },
+    "autoDocstring.docstringFormat": "google",
+    "editor.formatOnSave": true,
+    "editor.rulers": [
+        85
+    ],
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/**": true,
+        "**/.hg/store/**": true,
+        "**/venv/**": true,
+        "**.jpg": true
+    },
+    // Allow guests to run launch configurations and debug
+    "liveshare.allowGuestDebugControl": true,
+    "liveshare.allowGuestTaskControl": true,
+    "liveshare.languages.allowGuestCommandControl": true,
+    "liveshare.publishWorkspaceInfo": true,
+    "python.autoComplete.extraPaths": [
+        "${workspaceFolder}/python",
+    ],
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/python"
+    ],
+    "python.languageServer": "Pylance",
+    "python.formatting.provider": "black",
+}

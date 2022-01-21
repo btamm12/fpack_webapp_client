@@ -1,0 +1,15 @@
+# Code formatter (if this venv is the active Python interpreter)
+black
+
+# Send HTTP requests.
+aiohttp # Best asynchronous library
+
+# App framework.
+sanic
+
+# Advanced Python Scheduler (APScheduler) is a Python library that lets you schedule
+# your Python code to be executed later, either just once or periodically. 
+APScheduler
+
+# Timezone information for Python < 3.9
+backports.zoneinfo; python_version < '3.9'
