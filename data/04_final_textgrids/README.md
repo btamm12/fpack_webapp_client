@@ -1,3 +1,0 @@
-# Step 3: Automatically Generated Transcripts 
-
-...
