@@ -3,3 +3,10 @@ venv
 
 # We will create the correct symlink during the installation of the project.
 create_venv.sh
+
+# Don't push audio/annotation files.
+*.wav
+*.TextGrid
+
+# Python cache.
+*.pyc

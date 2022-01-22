@@ -1,0 +1,9 @@
+# Temporary Files
+
+As the `01_annotate_me/` folder is processed and emptied, two new files will be
+downloaded from the server:
+- an audio file
+- corresponding CTM file (contains predicted transcription and timing)
+
+From these files, a number of audio segments and TextGrid files will be
+generated and placed in the `01_annotate_me/` folder.

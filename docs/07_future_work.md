@@ -1,0 +1,9 @@
+[\[Back\]](./README.md) \
+🔲🔲🔲🔲🔲🔲⏹ \
+[\[<---\]](./06_sending_your_results.md) \[--->\]
+
+# 7. Future Work
+
+- Proper webservice...
+- No cooperation needed between annotators...
+- No intervention needed by someone with ESAT account...
