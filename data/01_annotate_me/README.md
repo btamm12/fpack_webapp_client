@@ -13,15 +13,11 @@ the `02_corrected_textgrids/` directory.
 > 3. Highlight the corresponding `.TextGrid` and `.wav` file.
 > 4. Press the `Open` button.
 
-
+**Video:**
 
 https://user-images.githubusercontent.com/32679237/150639398-970bfc8c-6205-4a50-8e60-29c356b9cec6.mp4
 
 
-
-
-
-(insert gif: load `xyz.wav` and `xyz.TextGrid` into object window, select both and press view)
 
 ## 1.2. Correcting Annotations
 
