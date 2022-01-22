@@ -13,6 +13,7 @@ the `02_corrected_textgrids/` directory.
 > 3. Highlight the corresponding `.TextGrid` and `.wav` file.
 > 4. Press the `Open` button.
 
+<video src='load_file.mp4' width="50%"/>
 
 (insert gif: load `xyz.wav` and `xyz.TextGrid` into object window, select both and press view)
 
