@@ -379,7 +379,7 @@ class Manager:
             # 2. Move/delete the files if necessary.
             if not has_moved_wav:
                 if os.path.exists(old_wav_path):
-                    msg = "> Moving WAV file '%s' to 02_corrected_textgrids/ folder."
+                    msg = "> Moving WAV file to 02_corrected_textgrids/ folder."
                     msg %= wav_name
                     logger.info(msg)
                     try:
@@ -391,7 +391,7 @@ class Manager:
                         log_exception(logger, e)
 
             if not has_removed_tg:
-                msg = "> Removing old TextGrid file '%s' from 01_annotate_me/ folder."
+                msg = "> Removing old TextGrid file from 01_annotate_me/ folder."
                 msg %= file_name
                 logger.info(msg)
                 try:
