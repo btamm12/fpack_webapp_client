@@ -129,12 +129,33 @@ executables from being scanned. Otherwise, Avast will waste a lot of time.
 
 ### 3.3. Create venv Symlink
 
-Run the following command to in Git Bash create the symlink "create_venv.sh" in the root directory.
+Run the following command to in Git Bash create the symlink "create_venv.sh" in the
+root directory.
 
 ```
 cd install/windows
 ./create_venv_symlink.sh
 ```
+
+### 3.4. Create my_sections.txt File
+Run the following command to in Git Bash create the file "my_sections.txt" in the
+collaboration directory.
+
+```
+cd install/windows
+./create_my_sections.sh
+```
+
+### 3.5. Create Virtual Environment (venv)
+Run the following command to in Git Bash create the virtual environment "venv" in the
+root directory.
+
+```
+cd [repo_root_dir]
+./create_venv.sh
+```
+
+
 
 ## 4. Installation: Development Components (Optional)
 

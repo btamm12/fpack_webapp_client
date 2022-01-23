@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Change working directory to this script's directory.
+# Directory calculations:
 # Source: https://stackoverflow.com/a/10348989
 # Example: https://stackoverflow.com/a/55798664
-#
+
 # Directory containing Bash script, i.e. "install/common/create_venv/".
 script_dir="$(dirname $(realpath "${BASH_SOURCE[0]}"))"
 root_dir="${script_dir}/../../.."

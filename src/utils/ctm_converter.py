@@ -1,3 +1,4 @@
+import asyncio
 import os
 from praatio import audio, textgrid
 from typing import List
@@ -21,7 +22,9 @@ class CtmConverter:
 
         # Check inputs.
         assert os.path.exists(ctm_path), "ctm_path '%s' does not exist." % ctm_path
-        assert os.path.exists(audio_path), "audio_path '%s' does not exist." % audio_path
+        assert os.path.exists(audio_path), (
+            "audio_path '%s' does not exist." % audio_path
+        )
         assert (
             SEGMENT_DURATION_SEC > 0
         ), "SEGMENT_DURATION_SEC must be a positive float."
@@ -40,11 +43,9 @@ class CtmConverter:
         self.MIN_SILENCE_SEC = MIN_SILENCE_SEC
         self.MIN_WORD_SEC = MIN_WORD_SEC
 
-
         # Parse lines.
         with open(ctm_path, "r") as f:
             ctm_lines = [CtmLine(use_ref, line=line) for line in f]
-
 
         # Append silences.
         eps = 1e-5
@@ -91,7 +92,6 @@ class CtmConverter:
                         ctm_lines[i + 1].start -= duration
                 ctm_lines.remove(ctm_lines[i])
                 continue
-
 
             i += 1
 
@@ -192,7 +192,9 @@ class CtmConverter:
         # Return utterance.
         return " ".join(x.word for x in lines)
 
-    def write_textgrids(self, textgrids_dir: str, audio_segments_dir: str):
+    async def write_textgrids_async(
+        self, textgrids_dir: str, audio_segments_dir: str, sleep_secs: float = 0.1
+    ):
         # Create output directories.
         if not os.path.exists(textgrids_dir):
             os.makedirs(textgrids_dir)
@@ -217,6 +219,9 @@ class CtmConverter:
         )
         eps = 1e-2
         while segment_start + eps < audio_duration:
+
+            # Give other threads a chance to run.
+            await asyncio.sleep(sleep_secs)
 
             # Calculate lines.
             filtered_lines = self.filter_lines(
@@ -257,9 +262,7 @@ class CtmConverter:
             )
             word_tier = textgrid.IntervalTier(
                 name="words",
-                entryList=[
-                    x.word_entry(offset=-segment_start) for x in filtered_lines
-                ],
+                entryList=[x.word_entry(offset=-segment_start) for x in filtered_lines],
                 minT=minT,
                 maxT=maxT,
             )
@@ -279,7 +282,8 @@ class CtmConverter:
 
             # Write the file.
             textgrid_segment_path = os.path.join(
-                textgrids_dir, "%s_%03i.TextGrid" % (self.base_name, segment_idx),
+                textgrids_dir,
+                "%s_%03i.TextGrid" % (self.base_name, segment_idx),
             )
             tg.save(
                 textgrid_segment_path,

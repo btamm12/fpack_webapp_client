@@ -2,12 +2,10 @@ import glob
 import os
 from praatio import textgrid
 from praatio.data_classes.interval_tier import Interval, IntervalTier
+from typing import List
 
 
-def text_grid_to_utterance(text_grid_glob: str):
-    text_grid_paths = sorted(glob.glob(text_grid_glob))
-    if len(text_grid_paths) == 0:
-        raise Exception("Glob returned no paths for %s." % text_grid_glob)
+def text_grid_to_utterance(text_grid_paths: List[str]):
 
     words = []
 

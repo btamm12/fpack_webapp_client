@@ -36,9 +36,13 @@ source linux_packages/install_packages.sh
 echo "> Creating 'create_venv.sh' symlink in root directory."
 source ../common/create_venv/create_venv_symlink.sh
 
-# * 1.4. Create venv.
+# * 1.4. Create "my_sections.txt".
+echo "> Creating 'my_sections.txt' file in collaboration directory."
+source ../common/my_sections/create_my_sections.sh
+
+# * 1.5. Create venv.
 echo "> Creating venv..."
-source 
+source ../../create_venv.sh
 
 # 2. Install development components?
 

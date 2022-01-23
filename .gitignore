@@ -1,3 +1,6 @@
+# Don't push subject mapping (security).
+subject_mapping.txt
+
 # Don't push virtual environment folder.
 venv
 

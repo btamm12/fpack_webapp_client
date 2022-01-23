@@ -4,8 +4,12 @@ black
 # Send HTTP requests.
 aiohttp # Best asynchronous library
 
+# Async file creation.
+aiofiles
+
 # App framework.
 sanic
+multidict>=5.0.0,<6.0.0a0 # otherwise dependency error (sanic) when creating venv
 
 # Advanced Python Scheduler (APScheduler) is a Python library that lets you schedule
 # your Python code to be executed later, either just once or periodically. 
@@ -13,3 +17,10 @@ APScheduler
 
 # Timezone information for Python < 3.9
 backports.zoneinfo; python_version < '3.9'
+
+# Praat utility package.
+praatio
+
+# Scientific/mathematical packages.
+numpy
+scipy # No stable Python 3.10 version yet!
