@@ -1,6 +1,12 @@
 # Installation – Annotator (Windows)
 
-## 1. Install Git
+## 1. Install Praat
+
+Praat is the software we will use for creating the annotations. To install Praat, you
+can download the `.zip` file from the
+[website](https://www.fon.hum.uva.nl/praat/download_win.html).
+
+## 2. Install Git
 
 1. Download Git from the [website](https://git-scm.com/download/win) and run the
    executable.
@@ -18,7 +24,7 @@
    - In the "Variable value:" field, enter `winsymlinks:nativestrict` .
    - Click "OK" on all the windows.
 
-## 2. Clone Repository
+## 3. Clone Repository
 
 Use the following commands to clone the repository.
 
@@ -29,11 +35,11 @@ git clone -c core.symlinks=true https://github.com/btamm12/fpack_webapp_client.g
 git config --global core.autocrlf true
 ```
 
-## 3. Installation: Core Components
+## 4. Installation: Core Components
 
-### 3.1. Python
+### 4.1. Python
 
-**3.1.1. Install Python**
+**4.1.1. Install Python**
 
 1. Download Python version 3.9 (some packages don't have a 3.10 release as of
    26/11/2021) from the [website](https://www.python.org/downloads/) and run the
@@ -57,7 +63,7 @@ git config --global core.autocrlf true
    
 **Note:** you will have to restart any terminals for this to take effect.
 
-**3.1.2. Configure Avast (Optional)**
+**4.1.2. Configure Avast (Optional)**
 
 If you are using Avast Antivirus, then you will want to exclude the Python
 executables from being scanned. Otherwise, Avast will waste a lot of time.
@@ -70,9 +76,9 @@ executables from being scanned. Otherwise, Avast will waste a lot of time.
    *\venv\Scripts\*
    ```
 
-### 3.2. Windows Packages
+### 4.2. Windows Packages
 
-**3.2.1. Microsoft C++ Runtime 14.0**
+**4.2.1. Microsoft C++ Runtime 14.0**
 
 For some Python packages Microsoft C++ Runtime 14.0 is required.
 
@@ -81,7 +87,7 @@ by running [this executable](https://aka.ms/vs/17/release/vc_redist.x64.exe), wh
 can be found on the [Microsoft download
 page](https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170).
 
-### 3.3. Install Other Core Components
+### 4.3. Install Other Core Components
 
 Run the following command in Git Bash to
 - create the symlink "create_venv.sh" in the root directory

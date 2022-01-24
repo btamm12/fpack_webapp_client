@@ -1,8 +1,14 @@
 # Installation – Developer (Windows)
 
-## 1. GitHub (First-Time Setup)
+## 1. Install Praat
 
-### 1.1 Install Git
+Praat is the software we will use for creating the annotations. To install Praat, you
+can download the `.zip` file from the
+[website](https://www.fon.hum.uva.nl/praat/download_win.html).
+
+## 2. GitHub (First-Time Setup)
+
+### 2.1 Install Git
 
 1. Download Git from the [website](https://git-scm.com/download/win) and run the
    executable.
@@ -25,7 +31,7 @@
    ln -s [TARGET] [LINK_NAME]
    ```
 
-### 1.2. Register SSH Key
+### 2.2. Register SSH Key
 If you already have an SSH key registered in GitHub for your computer, you may skip
 this step. If you don't, you need to follow this step in order to clone the
 repository.
@@ -58,7 +64,7 @@ repository.
    webpage. Enter a title, e.g. "Lenovo-Laptop-Linux", and click the "Add SSH Key"
    button.
 
-### 1.3. Configure Git Username/Email
+### 2.3. Configure Git Username/Email
 
 Configure your username and email in order to push to GitHub. It is best to use the
 same email that you used to register for GitHub. Open Git Bash and enter the
@@ -68,7 +74,7 @@ git config --global user.name "[username]"
 git config --global user.email "[email]"
 ```
 
-## 2. Clone Repository
+## 3. Clone Repository
 
 Use the following commands to clone the repository.
 
@@ -79,11 +85,11 @@ git clone -c core.symlinks=true git@github.com:btamm12/fpack_webapp_client.git
 git config --global core.autocrlf true
 ```
 
-## 3. Installation: Core Components
+## 4. Installation: Core Components
 
-### 3.1. Python
+### 4.1. Python
 
-**3.1.1. Install Python**
+**4.1.1. Install Python**
 
 1. Download Python version 3.9 (some packages don't have a 3.10 release as of
    26/11/2021) from the [website](https://www.python.org/downloads/) and run the
@@ -108,7 +114,7 @@ git config --global core.autocrlf true
 **Note:** you will have to restart any terminals (and VSCode) for this to take
 effect.
 
-**3.1.2. Configure Avast (Optional)**
+**4.1.2. Configure Avast (Optional)**
 
 If you are using Avast Antivirus, then you will want to exclude the Python
 executables from being scanned. Otherwise, Avast will waste a lot of time.
@@ -121,9 +127,9 @@ executables from being scanned. Otherwise, Avast will waste a lot of time.
    *\venv\Scripts\*
    ```
 
-### 3.2. Windows Packages
+### 4.2. Windows Packages
 
-**3.2.1. Microsoft C++ Runtime 14.0**
+**4.2.1. Microsoft C++ Runtime 14.0**
 
 For some Python packages Microsoft C++ Runtime 14.0 is required.
 
@@ -132,7 +138,7 @@ by running [this executable](https://aka.ms/vs/17/release/vc_redist.x64.exe), wh
 can be found on the [Microsoft download
 page](https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170).
 
-### 3.3. Install Other Core Components
+### 4.3. Install Other Core Components
 
 Run the following command in Git Bash to
 - create the symlink "create_venv.sh" in the root directory
@@ -145,27 +151,27 @@ install_other_core.sh
 ```
 
 
-## 4. Installation: Development Components
+## 5. Installation: Development Components
 
 
-### 4.1. Visual Studio Code
+### 5.1. Visual Studio Code
 
 We recommend using Visual Studio Code for this project.
 
-**4.1.1. Method 1: Normal Installation**
+**5.1.1. Method 1: Normal Installation**
 
 If you are on a personal computer with admin permissions, please download and
 run the VSCode Windows installer, which can be found on the [VSCode
 website](https://code.visualstudio.com/download).
 
-**4.1.2. Method 2: Portable Installation**
+**5.1.2. Method 2: Portable Installation**
 
 If you do not have admin permissions, please download and extract the VSCode ZIP
 file, which can be found on the [VSCode
 website](https://code.visualstudio.com/download). The executable can be found in
 the `bin/` folder.
 
-### 4.2. Creating launch.json Symlink
+### 5.2. Creating launch.json Symlink
 
 Create the Windows launch.json symlink by running the following command.
 
@@ -174,7 +180,7 @@ cd install/windows/dev
 ./create_launch_symlink.sh
 ```
 
-### 4.3. Installing Recommended Extensions
+### 5.3. Installing Recommended Extensions
 
 Please install the recommended VSCode extensions by running the following
 command in Git Bash.
