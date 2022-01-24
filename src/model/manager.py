@@ -389,7 +389,7 @@ class Manager:
             has_removed_tg = not os.path.exists(old_tg_path)
 
             if not has_moved_wav and not has_removed_tg:
-                msg = "Detected new corrected TextGrid: %s." % file_name
+                msg = "Detected a new TextGrid: %s." % file_name
                 logger.info(msg)
 
             # 2. Move/delete the files if necessary.
