@@ -1,5 +1,5 @@
 [\[Back\]](./README.md) \
-🔲🔲⏹⬛️⬛️⬛️⬛️ \
+🔲🔲⏹⬛️⬛️⬛️⬛️⬛️ \
 [\[<---\]](./02_file_types.md) [\[--->\]](./04_your_task_as_annotator.md)
 
 # 3. Working With Praat

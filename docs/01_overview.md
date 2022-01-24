@@ -1,5 +1,5 @@
 [\[Back\]](./README.md) \
-⏹⬛️⬛️⬛️⬛️⬛️⬛️ \
+⏹⬛️⬛️⬛️⬛️⬛️⬛️⬛️ \
 \[<---\] [\[--->\]](./02_file_types.md)
 
 # 1. Overview
@@ -24,7 +24,8 @@ contribute to this project. There are 7 sections:
 2. File Types (2 mins)
 3. Working With Praat (20 mins = video tutorial)
 4. Your Task As Annotator (x mins)
-5. Cooperation Between Annotators (x mins)
-6. Sending Your Results (x mins)
-7. Future Work (x mins)
+5. Request Subject Mapping (3 mins)
+6. Cooperation Between Annotators (3 mins)
+7. Sending Your Results (2 mins)
+8. Future Work (Developers) (5 mins)
 
