@@ -82,3 +82,30 @@ of time!
 the collaboration folder for more details.
 
 - [Collaboration Folder](collaboration/README.md)
+
+## 6. Running The Tool
+
+To run the tool, you must run the following commands in a terminal (Linux) or in Git
+Bash (Windows).
+
+### 6.1. Activate The Virtual Environment
+
+*Linux*
+```
+cd fpack_webapp_client/
+source venv/bin/activate
+```
+
+*Windows*
+```
+cd fpack_webapp_client/
+source venv/Scripts/activate
+```
+
+**Note:** the virtual environment can be deactivated by entering the `deactivate`
+command.
+
+### 6.2. Run The Application
+```
+python3 src/app.py
+```
