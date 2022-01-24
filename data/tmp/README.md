@@ -9,5 +9,5 @@ downloaded from the server:
 - an audio file
 - corresponding CTM file (contains predicted transcription and timing)
 
-From these files, a number of audio segments and TextGrid files will be
-generated and placed in the `01_annotate_me/` folder.
+From these files, a number of audio segments and TextGrid files will be generated and
+placed in the `01_annotate_me/` folder.

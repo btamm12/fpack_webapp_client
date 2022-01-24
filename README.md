@@ -45,7 +45,8 @@ https://user-images.githubusercontent.com/32679237/150655652-c79109e7-2384-49a3-
 You should download the repository by running one of the following commands in a
 terminal (Linux) or in Git Bash (Windows).
 
-**Note: the argument `-c core.symlinks=true` is crucial for pushing/pulling symlinks!**
+**Note: the argument `-c core.symlinks=true` is crucial for pushing/pulling
+symlinks!**
 
 *Annotator:*
 ```

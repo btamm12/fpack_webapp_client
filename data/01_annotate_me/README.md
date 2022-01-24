@@ -1,8 +1,8 @@
 # Step 1: Annotate Me!
 
-This directory will be automatically filled with a number of files. Your job is
-to load these files into Praat, correct the annotations, and save the results in
-the `02_corrected_textgrids/` directory.
+This directory will be automatically filled with a number of files. Your job is to
+load these files into Praat, correct the annotations, and save the results in the
+`02_corrected_textgrids/` directory.
 
 ## 1.1. Load Files Into Praat
 
@@ -27,8 +27,8 @@ https://user-images.githubusercontent.com/32679237/150655652-c79109e7-2384-49a3-
 
 **Important Notes:**
 - Corrections only need to be made in the "words" tier. Any modification in the
-  "utterance" and "score" tier will be overwritten by a later process, so there
-  is no point in making modifications there.
+  "utterance" and "score" tier will be overwritten by a later process, so there is no
+  point in making modifications there.
 - Only the final word order matters! Feel free to
   - replace a word, e.g.
     ```
