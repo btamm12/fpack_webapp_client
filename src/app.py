@@ -81,7 +81,7 @@ if __name__ == "__main__":
     __LOGGING_FMT__ = "[%(levelname)s @ %(asctime)s] %(message)s"
     __LOGGING_LVL_CONSOLE__ = logging.INFO
     __LOGGING_LVL_FILE__ = logging.INFO
-    __LOGGING_FILE_PATH__ = default_logger_path()
+    __LOGGING_FILE_PATH__ = default_logger_path(SRC_DIR)
     logger_setup(
         fmt=__LOGGING_FMT__,
         console_level=__LOGGING_LVL_CONSOLE__,
