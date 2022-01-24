@@ -69,7 +69,7 @@ bastiaan.tamm@kuleuven.be
 When I send you the file `subject_mapping.txt`, you must place it in the root folder
 of the repository, i.e.
 ```
-.../fpack_webapp_client/subject_mapping.txt
+fpack_webapp_client/subject_mapping.txt
 ```
 
 ## 5. Choosing Your Interview Sections
