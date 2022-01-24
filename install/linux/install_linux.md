@@ -63,11 +63,12 @@ cd install/linux
 ./install_linux.sh
 ```
 
-Use the command above to install the required components.
+Use the command above to install the **required components**.
 - Linux packages (see [packages.txt](linux_packages/packages.txt))
 - Creating `create_venv.sh` symlink in root directory
+- Creating `my_sections.txt` in collaboration directory
 
-The script will also ask if you want to install the development components. This
+The script will also ask if you want to install the **development components**. This
 requires the installation of [VSCode](https://code.visualstudio.com/download).
 The development components include
 - Creating `launch.json` symlink in .vscode directory
