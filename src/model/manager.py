@@ -8,7 +8,7 @@ from time import time
 
 from .state import State
 from logger import logger, log_exception
-from utils import CtmConverter, text_grid_to_utterance
+from utils import CtmConverter, textgrid_to_utterance
 
 
 class Manager:
@@ -107,7 +107,19 @@ class Manager:
         #     - move the corresponding WAV file from 01_annotate_me/ to
         #       02_corrected_textgrids/
         #     - delete the old TextGrid file from 01_annotate_me/
-        self._move_corrected_textgrids()
+        #   (the same applies for difficult_to_annotate/)
+        self._move_corrected_textgrids(
+            source_dir=self.dir_01_annotate_me,  # user saves in difficult...
+            dest_dir=self.dir_difficult_to_annotate,  # 01 -> difficult
+        )
+        self._move_corrected_textgrids(
+            source_dir=self.dir_01_annotate_me,  # user saves in 02...
+            dest_dir=self.dir_02_corrected_textgrids,  # check 01 -> 02
+        )
+        self._move_corrected_textgrids(
+            source_dir=self.dir_difficult_to_annotate,  # ... but could also come from difficult
+            dest_dir=self.dir_02_corrected_textgrids,  # check difficult -> 02
+        )
 
         # 3. Check if there are any interview sections that are completely corrected.
         #    If so,
@@ -307,7 +319,7 @@ class Manager:
                 msg = "Generating transcript from %i TextGrid files."
                 msg %= len(textgrid_paths)
                 logger.info(msg)
-                utt = text_grid_to_utterance(textgrid_paths)
+                utt = textgrid_to_utterance(textgrid_paths)
 
                 # Save result in 03_generated_transcripts.
                 transcript_name = "%s.txt" % section
@@ -350,9 +362,9 @@ class Manager:
                     msg = "> Removing %s" % path
                     self._remove_file(path)
 
-    def _move_corrected_textgrids(self):
+    def _move_corrected_textgrids(self, source_dir: str, dest_dir: str):
 
-        for file_name in os.listdir(self.dir_02_corrected_textgrids):
+        for file_name in os.listdir(dest_dir):
 
             base_name, ext = os.path.splitext(file_name)
             if ext != ".TextGrid":
@@ -365,11 +377,11 @@ class Manager:
             # 1. Check if we've already moved the .wav file and deleted the old
             #    TextGrid.
             wav_name = "%s.wav" % base_name
-            old_wav_path = os.path.join(self.dir_01_annotate_me, wav_name)
-            new_wav_path = os.path.join(self.dir_02_corrected_textgrids, wav_name)
+            old_wav_path = os.path.join(source_dir, wav_name)
+            new_wav_path = os.path.join(dest_dir, wav_name)
             has_moved_wav = os.path.exists(new_wav_path)
 
-            old_tg_path = os.path.join(self.dir_01_annotate_me, file_name)
+            old_tg_path = os.path.join(source_dir, file_name)
             has_removed_tg = not os.path.exists(old_tg_path)
 
             if not has_moved_wav and not has_removed_tg:

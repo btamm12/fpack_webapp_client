@@ -5,14 +5,14 @@ from praatio.data_classes.interval_tier import Interval, IntervalTier
 from typing import List
 
 
-def text_grid_to_utterance(text_grid_paths: List[str]):
+def textgrid_to_utterance(textgrid_paths: List[str]):
 
     words = []
 
-    for text_grid_path in text_grid_paths:
+    for textgrid_path in textgrid_paths:
 
         # Load TextGrid.
-        tg = textgrid.openTextgrid(text_grid_path, includeEmptyIntervals=False)
+        tg = textgrid.openTextgrid(textgrid_path, includeEmptyIntervals=False)
 
         # Go through "words" Tier.
         if "words" not in tg.tierNameList:
