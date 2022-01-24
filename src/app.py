@@ -69,9 +69,6 @@ def before_start(app, loop):
     global TICK_INTERVAL
 
     # Start periodic task.
-    # TODO: got this error, solved it by setting timezone manually. Maybe there's a
-    # better option?
-    # - https://stackoverflow.com/questions/69776414/pytzusagewarning-the-zone-attribute-is-specific-to-pytzs-interface-please-mig
     scheduler = AsyncIOScheduler({"event_loop": loop}, timezone="Europe/Brussels")
     scheduler.add_job(tick, "interval", seconds=TICK_INTERVAL)
     scheduler.start()
