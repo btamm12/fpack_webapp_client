@@ -392,7 +392,6 @@ class Manager:
             if not has_moved_wav:
                 if os.path.exists(old_wav_path):
                     msg = "> Moving WAV file to 02_corrected_textgrids/ folder."
-                    msg %= wav_name
                     logger.info(msg)
                     try:
                         os.rename(old_wav_path, new_wav_path)
@@ -404,7 +403,6 @@ class Manager:
 
             if not has_removed_tg:
                 msg = "> Removing old TextGrid file from 01_annotate_me/ folder."
-                msg %= file_name
                 logger.info(msg)
                 try:
                     os.remove(old_tg_path)
