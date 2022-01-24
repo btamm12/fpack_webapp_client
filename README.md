@@ -2,7 +2,36 @@
 
 ## 1. Overview
 
-TODO
+### 1.1. Project Description
+
+This annotation process is part of a longitudinal study of elderly subjects over 10
+years to study the evolution of Alzheimer's disease and how it relates to speech and
+brain characteristics. Some of the participants will be completely healthy, while
+others will have a diagnosis of an early-stage neurodegenerative disease.
+
+Spontaneous speech data is already being collected through interviews. This data must
+be accurately transcribed in order to perform further Natural Language Processing
+(NLP) analysis.
+
+### 1.2. Speech-To-Text Transcription Tool
+
+This tool uses the power of Automatic Speech Recognition (ASR) to greatly decrease
+the amount of time needed to transcribe audio files. The tool also uses a streamlined
+process to keep your annotations organized.
+
+**Highlights:**
+
+- **Automatic data loading:** unannotated files are automatically downloaded from the
+  server and placed in your working directory (`data/01_annotate_me`).
+- **Data segmentation:** instead of working with the entire audio file, this tool
+  will split the interview into segments that are roughly 15 seconds long. This way
+  each segment is manageable, and there's never a risk of losing too much progress
+  (e.g. if you forget to save or your computer crashes).
+- **Transcription prediction:** instead of having you, the annotator, indicate the
+  start/stop times and transcribe each word manually, we are using Automatic Speech
+  Recognition (ASR) to speed up the process. An ASR model will be used to
+  automatically generate a transcription and it will be your job to fix any mistakes.
+
 ## 2. Installation
 
 Choose the appropriate guide based on your operating system.
@@ -10,7 +39,17 @@ Choose the appropriate guide based on your operating system.
 1. [Linux Installation](install/linux/install_linux.md)
 2. [Windows Installation](install/windows/install_windows.md)
 
-## 3. Request Subject Mapping
+## 3. Documentation
+
+It is highly recommended to read the documentation before starting the annotations.
+
+- [Documentation](docs/README.md)
+
+There is also more specific details available in the `data/` folder, where most of
+your time will be spent.
+
+- [Specific Details (Data Folder)](data/README.md)
+## 4. Request Subject Mapping
 
 Before this application can do anything, it needs a certain file, called the "subject
 mapping". This file provides an extra layer of security to protect the data of the
@@ -27,3 +66,14 @@ of the repository, i.e.
 ```
 .../fpack_webapp_client/subject_mapping.txt
 ```
+
+## 5. Choosing Your Interview Sections
+
+You should coordinate with your fellow annotators about who will annotate which data.
+Otherwise you might both annotate the same interviews, which would not be a great use
+of time!
+
+**You must select some interview sections before the tool will start working.** See
+the collaboration folder for more details.
+
+- [Collaboration Folder](collaboration/README.md)
