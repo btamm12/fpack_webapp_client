@@ -19,6 +19,11 @@ This tool uses the power of Automatic Speech Recognition (ASR) to greatly decrea
 the amount of time needed to transcribe audio files. The tool also uses a streamlined
 process to keep your annotations organized.
 
+
+**Video:**
+
+https://user-images.githubusercontent.com/32679237/150655652-c79109e7-2384-49a3-83ec-1c590af279c8.mp4
+
 **Highlights:**
 
 - **Automatic data loading:** unannotated files are automatically downloaded from the
