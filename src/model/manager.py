@@ -364,6 +364,10 @@ class Manager:
 
     def _move_corrected_textgrids(self, source_dir: str, dest_dir: str):
 
+        # Extract name of source_dir and dest_dir for logging.
+        source_dir_str = os.path.basename(source_dir) + "/"
+        dest_dir_str = os.path.basename(dest_dir) + "/"
+
         for file_name in os.listdir(dest_dir):
 
             base_name, ext = os.path.splitext(file_name)
@@ -391,7 +395,8 @@ class Manager:
             # 2. Move/delete the files if necessary.
             if not has_moved_wav:
                 if os.path.exists(old_wav_path):
-                    msg = "> Moving WAV file to 02_corrected_textgrids/ folder."
+                    msg = "> Moving WAV file to %s folder."
+                    msg %= dest_dir_str
                     logger.info(msg)
                     try:
                         os.rename(old_wav_path, new_wav_path)
@@ -402,7 +407,8 @@ class Manager:
                         log_exception(logger, e)
 
             if not has_removed_tg:
-                msg = "> Removing old TextGrid file from 01_annotate_me/ folder."
+                msg = "> Removing old TextGrid file from %s folder."
+                msg %= source_dir_str
                 logger.info(msg)
                 try:
                     os.remove(old_tg_path)
