@@ -1,4 +1,4 @@
-# Installation (Windows)
+# Installation – Annotator (Windows)
 
 ## 1. Install Git
 
@@ -17,7 +17,6 @@
    - In the "Variable name:" field, enter `MSYS` .
    - In the "Variable value:" field, enter `winsymlinks:nativestrict` .
    - Click "OK" on all the windows.
-   ```
 
 ## 2. Clone Repository
 
@@ -73,9 +72,14 @@ executables from being scanned. Otherwise, Avast will waste a lot of time.
 
 ### 3.2. Windows Packages
 
-- Microsoft C++ Runtime 14.0: https://aka.ms/vs/17/release/vc_redist.x64.exe
-  - Source: https://docs.microsoft.com/en-us/answers/questions/419525/microsoft-visual-c-140-or-greater-is-required.html
-  - Download page: https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170
+**3.2.1. Microsoft C++ Runtime 14.0**
+
+For some Python packages Microsoft C++ Runtime 14.0 is required.
+
+- You can install this
+by running [this executable](https://aka.ms/vs/17/release/vc_redist.x64.exe), which
+can be found on the [Microsoft download
+page](https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170).
 
 ### 3.3. Install Other Core Components
 
@@ -89,71 +93,3 @@ cd install/windows
 install_other_core.sh
 ```
 
-### 3.3. Create venv Symlink
-
-Run the following command in Git Bash create the symlink "create_venv.sh" in the
-root directory.
-
-```
-cd install/windows
-./create_venv_symlink.sh
-```
-
-### 3.4. Create my_sections.txt File
-Run the following command to in Git Bash create the file "my_sections.txt" in the
-collaboration directory.
-
-```
-cd install/windows
-./create_my_sections.sh
-```
-
-### 3.5. Create Virtual Environment (venv)
-Run the following command to in Git Bash create the virtual environment "venv" in the
-root directory.
-
-```
-cd [repo_root_dir]
-./create_venv.sh
-```
-
-
-
-## 4. Installation: Development Components (Optional)
-
-
-### 4.1. Visual Studio Code
-
-We recommend using Visual Studio Code for this project.
-
-**4.1.1. Method 1: Normal Installation**
-
-If you are on a personal computer with admin permissions, please download and
-run the VSCode Windows installer, which can be found on the [VSCode
-website](https://code.visualstudio.com/download).
-
-**4.1.2. Method 2: Portable Installation**
-
-If you do not have admin permissions, please download and extract the VSCode ZIP
-file, which can be found on the [VSCode
-website](https://code.visualstudio.com/download). The executable can be found in
-the `bin/` folder.
-
-### 4.2. Creating launch.json Symlink
-
-Create the Windows launch.json symlink by running the following command.
-
-```
-cd install/windows/dev
-./create_launch_symlink.sh
-```
-
-### 4.3. Installing Recommended Extensions
-
-Please install the recommended VSCode extensions by running the following
-command in Git Bash.
-
-```
-cd install/windows/dev
-./install_extensions.sh
-```

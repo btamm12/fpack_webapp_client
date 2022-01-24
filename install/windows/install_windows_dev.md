@@ -1,4 +1,4 @@
-# Installation (Windows)
+# Installation – Developer (Windows)
 
 ## 1. GitHub (First-Time Setup)
 
@@ -123,9 +123,14 @@ executables from being scanned. Otherwise, Avast will waste a lot of time.
 
 ### 3.2. Windows Packages
 
-- Microsoft C++ Runtime 14.0: https://aka.ms/vs/17/release/vc_redist.x64.exe
-  - Source: https://docs.microsoft.com/en-us/answers/questions/419525/microsoft-visual-c-140-or-greater-is-required.html
-  - Download page: https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170
+**3.2.1. Microsoft C++ Runtime 14.0**
+
+For some Python packages Microsoft C++ Runtime 14.0 is required.
+
+- You can install this
+by running [this executable](https://aka.ms/vs/17/release/vc_redist.x64.exe), which
+can be found on the [Microsoft download
+page](https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170).
 
 ### 3.3. Install Other Core Components
 
@@ -140,7 +145,7 @@ install_other_core.sh
 ```
 
 
-## 4. Installation: Development Components (Optional)
+## 4. Installation: Development Components
 
 
 ### 4.1. Visual Studio Code
