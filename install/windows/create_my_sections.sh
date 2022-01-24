@@ -1,1 +1,0 @@
-../common/my_sections/create_my_sections.sh
