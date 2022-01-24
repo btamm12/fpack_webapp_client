@@ -7,7 +7,8 @@
 This annotation process is part of a longitudinal study of elderly subjects over 10
 years to study the evolution of Alzheimer's disease and how it relates to speech and
 brain characteristics. Some of the participants will be completely healthy, while
-others will have a diagnosis of an early-stage neurodegenerative disease.
+others will have a diagnosis of an early-stage neurodegenerative disease. The
+language spoken by the participants is Dutch.
 
 Spontaneous speech data is already being collected through interviews. This data must
 be accurately transcribed in order to perform further Natural Language Processing

@@ -66,6 +66,9 @@ When you have completely corrected the annotation file, save it in the
 
 https://user-images.githubusercontent.com/32679237/150655656-3a47c8ce-c38f-4c80-9ba5-3fbcac5c39b6.mp4
 
-**Note:** if the annotation file is not yet finished, but you would like to save
-your progress, then you should overwrite the file (i.e. save it in the
+**Note 1:** if the annotation file is not yet finished, but you would like to save
+your progress, then you should overwrite the TextGrid file (i.e. save it in the
 `01_annotate_me/` folder).
+
+**Note 2:** if the annotation file is too difficult and you would like to save it for
+later, then you should save the TextGrid file in the `difficult_to_annotate/` folder.
