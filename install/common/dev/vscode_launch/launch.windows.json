@@ -7,7 +7,7 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "cwd": "${fileDirname}",
-            "python": "${workspaceFolder}/src/asr/venv/Scripts/python"
+            "python": "${workspaceFolder}/venv/Scripts/python"
         }
     ]
 }

@@ -48,17 +48,17 @@ terminal (Linux) or in Git Bash (Windows).
 **Note: the argument `-c core.symlinks=true` is crucial for pushing/pulling
 symlinks!**
 
-*Annotator:*
+*Annotator*
 ```
 git clone -c core.symlinks=true https://github.com/btamm12/fpack_webapp_client.git
 ```
 
-*Developer (Linux):*
+*Developer (Linux)*
 ```
 git clone -c core.symlinks=true git@github.com:btamm12/fpack_webapp_client.git
 ```
 
-*Developer (Windows):*
+*Developer (Windows)*
 ```
 git clone -c core.symlinks=true git@github.com:btamm12/fpack_webapp_client.git
 git config --global core.autocrlf true
@@ -68,11 +68,11 @@ git config --global core.autocrlf true
 
 Please follow the appropriate guide based on your operating system.
 
-*Annotator:*
+*Annotator*
 - [Linux Installation (Annotator)](install/linux/install_linux.md)
 - [Windows Installation (Annotator)](install/windows/install_windows.md)
 
-*Developer:*
+*Developer*
 - [Linux Installation (Developer)](install/linux/install_linux_dev.md)
 - [Windows Installation (Developer)](install/windows/install_windows_dev.md)
 
@@ -139,6 +139,12 @@ source venv/Scripts/activate
 command.
 
 ### 6.2. Run The Application
+*Linux*
 ```
 python3 src/app.py
+```
+
+*Windows*
+```
+python src/app.py
 ```
