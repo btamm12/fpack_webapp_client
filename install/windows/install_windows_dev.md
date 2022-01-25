@@ -149,7 +149,7 @@ Run the following command in Git Bash to
 
 ```
 cd install/windows
-install_other_core.sh
+bash install_other_core.sh
 ```
 
 
@@ -179,7 +179,7 @@ Create the Windows launch.json symlink by running the following command.
 
 ```
 cd install/windows/dev
-./create_launch_symlink.sh
+bash create_launch_symlink.sh
 ```
 
 ### 5.3. Installing Recommended Extensions
@@ -189,5 +189,5 @@ command in Git Bash.
 
 ```
 cd install/windows/dev
-./install_extensions.sh
+bash install_extensions.sh
 ```

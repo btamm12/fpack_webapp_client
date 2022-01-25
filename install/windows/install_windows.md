@@ -98,6 +98,6 @@ Run the following command in Git Bash to
 
 ```
 cd install/windows
-install_other_core.sh
+bash install_other_core.sh
 ```
 
