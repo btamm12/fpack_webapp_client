@@ -18,7 +18,8 @@ def default_logger_path(src_dir="."):
     """
     dt_str = datetime.now().replace(microsecond=0).isoformat()
     dt_str = dt_str.replace(":", "-")
-    path = os.path.realpath(os.path.join(src_dir, "../logs/app", dt_str + ".log"))
+    path = os.path.join(src_dir, os.pardir, "logs", "app", dt_str + ".log")
+    path = os.path.realpath(path)
     return path
 
 
