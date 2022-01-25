@@ -43,7 +43,7 @@ git config --global core.autocrlf true
 
 1. Download Python version 3.9 (some packages don't have a 3.10 release as of
    26/11/2021) from the [website](https://www.python.org/downloads/) and run the
-   executable.
+   [executable](https://www.python.org/ftp/python/3.9.10/python-3.9.10-amd64.exe).
 2. You can check if Python 3.9 is installed by running the following command in the
    Command Prompt
    ```
