@@ -171,18 +171,22 @@ class Manager:
 
         # URLs.
         CTM_URL = "/".join(
-            self.SERVER_URL_BASE,
-            "data/fpack/ctm_init",
-            self.subject_mapping[subject_name],
-            subject_name,
-            section_name + ".ctm",
+            (
+                self.SERVER_URL_BASE,
+                "data/fpack/ctm_init",
+                self.subject_mapping[subject_name],
+                subject_name,
+                section_name + ".ctm",
+            )
         )
         WAV_URL = "/".join(
-            self.SERVER_URL_BASE,
-            "data/fpack/audio/int16",
-            self.subject_mapping[subject_name],
-            subject_name,
-            section_name + ".wav",
+            (
+                self.SERVER_URL_BASE,
+                "data/fpack/audio/int16",
+                self.subject_mapping[subject_name],
+                subject_name,
+                section_name + ".wav",
+            )
         )
 
         # Save paths.
