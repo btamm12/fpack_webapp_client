@@ -111,6 +111,8 @@ git config --global core.autocrlf true
    - Near the bottom of the window, click the "Environment Variables..." button.
    - In the "System variables" pane, double click on the "Path" variable.
    - Click the "New" button and paste the path to the `Scripts` folder.
+   - If the path to the Python folder itself (i.e. without `\Scripts`) is not in the
+     list, add it as well using the "New" button.
    - Click "OK" on all of the windows.
    
 **Note:** you will have to restart any terminals (and VSCode) for this to take
