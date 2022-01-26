@@ -27,6 +27,9 @@ class Manager:
         self.SUBJECT_MAPPING_PATH = SUBJECT_MAPPING_PATH
         self.MY_SECTIONS_PATH = MY_SECTIONS_PATH
         self.STATE_PATH = STATE_PATH
+        # Remove final slash if it is provided!
+        if SERVER_URL_BASE[-1] == "/":
+            SERVER_URL_BASE = SERVER_URL_BASE[:-1]
         self.SERVER_URL_BASE = SERVER_URL_BASE
         self.DOWNLOAD_FAIL_TIMEOUT_SECS = DOWNLOAD_FAIL_TIMEOUT_SECS
 
@@ -167,19 +170,23 @@ class Manager:
         subject_name = section_name.split("_")[0]
 
         # URLs.
-        CTM_URL = os.path.join(
-            self.SERVER_URL_BASE,
-            "data/fpack/ctm_init",
-            self.subject_mapping[subject_name],
-            subject_name,
-            section_name + ".ctm",
+        CTM_URL = "/".join(
+            (
+                self.SERVER_URL_BASE,
+                "data/fpack/ctm_init",
+                self.subject_mapping[subject_name],
+                subject_name,
+                section_name + ".ctm",
+            )
         )
-        WAV_URL = os.path.join(
-            self.SERVER_URL_BASE,
-            "data/fpack/audio/int16",
-            self.subject_mapping[subject_name],
-            subject_name,
-            section_name + ".wav",
+        WAV_URL = "/".join(
+            (
+                self.SERVER_URL_BASE,
+                "data/fpack/audio/int16",
+                self.subject_mapping[subject_name],
+                subject_name,
+                section_name + ".wav",
+            )
         )
 
         # Save paths.
@@ -196,6 +203,15 @@ class Manager:
                         f = await aiofiles.open(CTM_PATH, mode="wb")
                         await f.write(await resp.read())
                         await f.close()
+                    else:
+                        status_str = str(resp.status)
+                        body_str = await resp.text()
+                        msg = "Failed to download CTM file from '%s'" % CTM_URL
+                        msg += "Server returned status code %s." % status_str
+                        msg += "Response text: %s" % body_str
+                        logger.error(msg)
+                        return False  # success == False
+
         except Exception as e:
             msg = "Failed to download CTM file from '%s' and save to '%s'."
             msg %= (CTM_URL, CTM_PATH)
@@ -212,6 +228,14 @@ class Manager:
                         f = await aiofiles.open(WAV_PATH, mode="wb")
                         await f.write(await resp.read())
                         await f.close()
+                    else:
+                        status_str = str(resp.status)
+                        body_str = await resp.text()
+                        msg = "Failed to download WAV file from '%s'" % WAV_URL
+                        msg += "Server returned status code %s." % status_str
+                        msg += "Response text: %s" % body_str
+                        logger.error(msg)
+                        return False  # success == False
         except Exception as e:
             msg = "Failed to download WAV file from '%s' and save to '%s'."
             msg %= (WAV_URL, WAV_PATH)
@@ -358,6 +382,10 @@ class Manager:
 
     def _move_corrected_textgrids(self, source_dir: str, dest_dir: str):
 
+        # Extract name of source_dir and dest_dir for logging.
+        source_dir_str = os.path.basename(source_dir) + "/"
+        dest_dir_str = os.path.basename(dest_dir) + "/"
+
         for file_name in os.listdir(dest_dir):
 
             base_name, ext = os.path.splitext(file_name)
@@ -379,14 +407,14 @@ class Manager:
             has_removed_tg = not os.path.exists(old_tg_path)
 
             if not has_moved_wav and not has_removed_tg:
-                msg = "Detected new corrected TextGrid: %s." % file_name
+                msg = "Detected a new TextGrid: %s." % file_name
                 logger.info(msg)
 
             # 2. Move/delete the files if necessary.
             if not has_moved_wav:
                 if os.path.exists(old_wav_path):
-                    msg = "> Moving WAV file to 02_corrected_textgrids/ folder."
-                    msg %= wav_name
+                    msg = "> Moving WAV file to %s folder."
+                    msg %= dest_dir_str
                     logger.info(msg)
                     try:
                         os.rename(old_wav_path, new_wav_path)
@@ -397,8 +425,8 @@ class Manager:
                         log_exception(logger, e)
 
             if not has_removed_tg:
-                msg = "> Removing old TextGrid file from 01_annotate_me/ folder."
-                msg %= file_name
+                msg = "> Removing old TextGrid file from %s folder."
+                msg %= source_dir_str
                 logger.info(msg)
                 try:
                     os.remove(old_tg_path)

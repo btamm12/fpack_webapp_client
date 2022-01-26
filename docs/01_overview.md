@@ -29,3 +29,7 @@ to this project. There are 7 sections:
 7. Sending Your Results (2 mins)
 8. Future Work (Developers) (5 mins)
 
+After reading the documentation, you should also have a look at the README file in
+the `data/` folder, which contains more specific details.
+
+- [Specific Details (Data Folder)](data/README.md) (10 mins)

@@ -43,15 +43,17 @@ git config --global core.autocrlf true
 
 1. Download Python version 3.9 (some packages don't have a 3.10 release as of
    26/11/2021) from the [website](https://www.python.org/downloads/) and run the
-   executable.
-2. Open the Command Prompt and search for the location where Python was installed by
-   running the following command.
+   [executable](https://www.python.org/ftp/python/3.9.10/python-3.9.10-amd64.exe).
+2. You can check if Python 3.9 is installed by running the following command in the
+   Command Prompt
+   ```
+   python --version
+   ```
+3. Enter the following command in the Command Prompt to search for the location where
+   Python was installed.
    ```
    where python
    ```
-3. Navigate to this location and copy the file `python.exe` and paste it in the same
-   location. Rename the new file `python3.exe`. This allows for compatability with
-   scripts that lauch Python using "python3".
 4. Add `C:\path\to\python\Scripts` to the `PATH` environment variable. This will
    allow you to use Python's `pip` installer.
    - Search for "Edit the system environment variables" in the Windows search bar and
@@ -59,6 +61,8 @@ git config --global core.autocrlf true
    - Near the bottom of the window, click the "Environment Variables..." button.
    - In the "System variables" pane, double click on the "Path" variable.
    - Click the "New" button and paste the path to the `Scripts` folder.
+   - If the path to the Python folder itself (i.e. without `\Scripts`) is not in the
+     list, add it as well using the "New" button.
    - Click "OK" on all of the windows.
    
 **Note:** you will have to restart any terminals for this to take effect.
@@ -96,6 +100,6 @@ Run the following command in Git Bash to
 
 ```
 cd install/windows
-install_other_core.sh
+bash install_other_core.sh
 ```
 

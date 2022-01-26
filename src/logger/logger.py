@@ -7,7 +7,7 @@ import traceback
 logger = logging.getLogger(__name__)
 
 
-def default_logger_path():
+def default_logger_path(src_dir="."):
     """
     Returns the default logger path, relative to `app.py`.
 
@@ -17,7 +17,10 @@ def default_logger_path():
     ```
     """
     dt_str = datetime.now().replace(microsecond=0).isoformat()
-    return "../logs/app/%s.log" % dt_str
+    dt_str = dt_str.replace(":", "-")
+    path = os.path.join(src_dir, os.pardir, "logs", "app", dt_str + ".log")
+    path = os.path.realpath(path)
+    return path
 
 
 def log_exception(logger: logging.Logger, e: Exception):

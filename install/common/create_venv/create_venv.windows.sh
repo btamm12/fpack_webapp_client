@@ -23,14 +23,14 @@ if [ -d "venv" ]; then
                 echo "Removing 'venv/' folder..."
                 rm -rf ./venv/
                 echo "Creating the virtual environment under the 'venv' folder..."
-                python3 -m venv ./venv/
+                python -m venv ./venv/
                 break;;
             [Nn]* ) break;;
         esac
     done
 else
     echo "Creating the virtual environment under the 'venv' folder..."
-    python3 -m venv ./venv/
+    python -m venv ./venv/
 fi
 
 # Add '..' folder to Python path.
@@ -46,11 +46,6 @@ if [ "$ADD_PARDIR" = true ]; then
     echo "Adding $_windows_backslash to venv .pth file."
     echo "import site; site.addsitedir(r'$_windows_backslash')" &> ./venv/Lib/site-packages/_global_path.py
 fi
-
-
-# Create python3 in the folder too!
-echo "Creating python3.exe in venv."
-cp ./venv/Scripts/python.exe ./venv/Scripts/python3.exe 
 
 
 # Activate virtual environment and install the required packages.
