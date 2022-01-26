@@ -18,7 +18,7 @@ to know why and how.
 
 **Source:** https://keepachangelog.com/en/1.0.0/
 
-## 4. Template
+## 4. Template Changelog
 When creating a new file, use the following template. `[N]` represents the MAJOR
 version number.
 
@@ -65,5 +65,72 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 - ...
+
+```
+
+## 5. Template Planned Changes
+When planning and implementing changes, use the file `planned_changes.md` to keep
+track of everything. This will also make writing the changelog easy. `[N]` represents
+the MAJOR version number.
+
+**Remove any sections (Added, Changed, Deprecated, Removed, Fixed, Security) that are
+not used.**
+
+*planned_changes.md*
+```
+# Planned Changes
+
+## `v[N].x.x`
+
+**Title:** Released XYZ \
+**Release Date:** N/A
+
+### Added
+- **Finished:**
+  - ...
+- **Work In Progress:**
+  - ...
+- **To-Do:**
+  -  ...
+
+### Changed
+- **Finished:**
+  - ...
+- **Work In Progress:**
+  - ...
+- **To-Do:**
+  -  ...
+
+### Deprecated
+- **Finished:**
+  - ...
+- **Work In Progress:**
+  - ...
+- **To-Do:**
+  -  ...
+
+### Removed
+- **Finished:**
+  - ...
+- **Work In Progress:**
+  - ...
+- **To-Do:**
+  -  ...
+
+### Fixed
+- **Finished:**
+  - ...
+- **Work In Progress:**
+  - ...
+- **To-Do:**
+  -  ...
+
+### Security
+- **Finished:**
+  - ...
+- **Work In Progress:**
+  - ...
+- **To-Do:**
+  -  ...
 
 ```
