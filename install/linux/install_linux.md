@@ -36,7 +36,7 @@ git clone -c core.symlinks=true https://github.com/btamm12/fpack_webapp_client.g
 
 ```
 cd install/linux
-./install_linux.sh
+bash install_linux.sh
 ```
 
 Use the command above to install the **required components**.

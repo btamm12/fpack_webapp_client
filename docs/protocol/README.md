@@ -47,7 +47,8 @@ letters for proper names (e.g. "Bert Jansens") and for titles of books, records,
      - *e.g. "hij zegt voor de grap toekenbas\*u in plaats van boekentas"*
    - C7b. slips of the tongue:
      - *e.g. "ik heb me verspraakt\*u"*
-     - *e.g. "KPN annuleert fusie met Spaans bedrijf alduns\*u aldus een kop in de krant"*
+     - *e.g. "KPN annuleert fusie met Spaans bedrijf alduns\*u aldus een kop in de
+       krant"*
    - C7c. all cases of slips of the tongue and resumptions WITHIN A WORD. In contrast
      with the \*a tag, the word is completed!: 
      - *e.g. "hij is nog niet naar de kapper gewee-weest\*u"*

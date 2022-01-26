@@ -8,6 +8,7 @@ venv
 create_venv.sh
 
 # Don't push audio/annotation files.
+*.ctm
 *.wav
 *.TextGrid
 
