@@ -281,12 +281,6 @@ class Manager:
         # success == True
         return True
 
-    def _remove_file(self, path: str):
-        try:
-            os.remove(path)
-        except:
-            pass
-
     def _generate_transcripts(self):
 
         # Extract section names for the first two directories.
@@ -424,6 +418,12 @@ class Manager:
                     msg = "Failed to remove WAV file %s" % old_wav_path
                     logger.error(msg)
                     log_exception(logger, e)
+
+    def _remove_file(self, path: str):
+        try:
+            os.remove(path)
+        except:
+            pass
 
     async def _start_requesting_data(self):
 
