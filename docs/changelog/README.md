@@ -73,9 +73,6 @@ When planning and implementing changes, use the file `planned_changes.md` to kee
 track of everything. This will also make writing the changelog easy. `[N]` represents
 the MAJOR version number.
 
-**Remove any sections (Added, Changed, Deprecated, Removed, Fixed, Security) that are
-not used.**
-
 *planned_changes.md*
 ```
 # Planned Changes
