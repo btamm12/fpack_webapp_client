@@ -58,6 +58,10 @@ class Manager:
             DATA_DIR,
             "difficult_to_annotate",
         )
+        self.dir_example_transcripts = os.path.join(
+            DATA_DIR,
+            "example_transcripts",
+        )
         self.dir_tmp = os.path.join(DATA_DIR, "tmp")
 
         # Make sure paths exist.
@@ -97,6 +101,9 @@ class Manager:
         # Has the version been checked?
         self.has_checked_version: bool = False
 
+        # Has the application check for new example transcripts?
+        self.has_checked_example_transcripts = False
+
         # Boolean flag for printing.
         self.printed_no_new_sections: bool = False
 
@@ -113,6 +120,11 @@ class Manager:
         if not self.has_checked_version:
             await self._check_version()
             self.has_checked_version = True
+
+        # First tick: check for new example transcripts.
+        if not self.has_checked_example_transcripts:
+            await self._check_example_transcripts()
+            self.has_checked_example_transcripts = True
 
         # 1. Check if new data needs to be downloaded.
         await self._check_for_new_data()
@@ -157,6 +169,7 @@ class Manager:
             (self.dir_03_generated_transcripts, "03_generated_transcripts"),
             (self.dir_04_submitted_transcripts, "04_submitted_transcripts"),
             (self.dir_difficult_to_annotate, "difficult_to_annotate"),
+            (self.dir_example_transcripts, "example_transcripts"),
             (self.dir_tmp, "tmp"),
         ]
         for args in args_list:
@@ -223,6 +236,141 @@ class Manager:
             msg = "Failed to get latest version from '%s'" % VERSION_URL
             logger.error(msg)
             log_exception(logger, e)
+
+    async def _check_example_transcripts(self):
+
+        # URL.
+        EXAMPLE_SECTIONS_URL = "/".join(
+            (
+                self.SERVER_URL_BASE,
+                "data/fpack/example_transcripts",
+                "example_sections.txt",
+            )
+        )
+
+        # Fetch example_sections txt file.
+        example_sections = None
+        msg = "Checking for new example transcripts..."
+        logger.info(msg)
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(EXAMPLE_SECTIONS_URL) as resp:
+                    if resp.status == 200:
+                        resp_text = await resp.text()
+                        example_sections = [
+                            x.strip() for x in resp_text.split(sep="\n")
+                        ]
+                    else:
+                        status_str = str(resp.status)
+                        body_str = await resp.text()
+                        msg = "Failed to get example sections from '%s'"
+                        msg %= EXAMPLE_SECTIONS_URL
+                        msg += "Server returned status code %s." % status_str
+                        msg += "Response text: %s" % body_str
+                        logger.error(msg)
+
+        except Exception as e:
+            msg = "Failed to get example sections from '%s'" % EXAMPLE_SECTIONS_URL
+            logger.error(msg)
+            log_exception(logger, e)
+
+        # If we failed to get the sections, exit.
+        if example_sections is None:
+            return
+
+        # Fetch any new sections.
+        def only_txt(x: str):
+            return os.path.splitext(x)[1] == ".txt"
+
+        new_file_found = False
+        downloaded_examples = os.listdir(self.dir_example_transcripts)
+        downloaded_examples = set(filter(only_txt, downloaded_examples))
+        for section_name in example_sections:
+            if (section_name + ".txt") not in downloaded_examples:
+                # Flag for logging.
+                new_file_found = True
+
+                # Extract subject name.
+                subject_name = section_name.split("_")[0]
+
+                # URLs.
+                TRANSCRIPT_URL = "/".join(
+                    (
+                        self.SERVER_URL_BASE,
+                        "data/fpack/example_transcripts",
+                        self.subject_mapping[subject_name],
+                        subject_name,
+                        section_name + ".txt",
+                    )
+                )
+                WAV_URL = "/".join(
+                    (
+                        self.SERVER_URL_BASE,
+                        "data/fpack/audio/int16",
+                        self.subject_mapping[subject_name],
+                        subject_name,
+                        section_name + ".wav",
+                    )
+                )
+
+                # Save paths.
+                TRANSCRIPT_PATH = os.path.join(
+                    self.dir_example_transcripts,
+                    section_name + ".txt",
+                )
+                WAV_LINK_PATH = os.path.join(
+                    self.dir_example_transcripts,
+                    section_name + "_WAV.html",
+                )
+
+                # Fetch transcript file.
+                msg = "> Downloading example transcript: '%s'..." % section_name
+                logger.info(msg)
+                try:
+                    async with aiohttp.ClientSession() as session:
+                        async with session.get(TRANSCRIPT_URL) as resp:
+                            if resp.status == 200:
+                                f = await aiofiles.open(TRANSCRIPT_PATH, mode="wb")
+                                await f.write(await resp.read())
+                                await f.close()
+                                f = await aiofiles.open(WAV_LINK_PATH, mode="w")
+                                await f.write(self._shortcut_html_body(WAV_URL))
+                                await f.close()
+                            else:
+                                status_str = str(resp.status)
+                                body_str = await resp.text()
+                                msg = (
+                                    "Failed to download txt file from '%s'"
+                                    % TRANSCRIPT_URL
+                                )
+                                msg += "Server returned status code %s." % status_str
+                                msg += "Response text: %s" % body_str
+                                logger.error(msg)
+
+                except Exception as e:
+                    msg = "Failed to download txt file from '%s' and save to '%s', and create shortcut '%s'."
+                    msg %= (TRANSCRIPT_URL, TRANSCRIPT_PATH, WAV_LINK_PATH)
+                    logger.error(msg)
+                    log_exception(logger, e)
+                    return
+
+        if new_file_found:
+            msg = "Finished downloading example transcripts."
+        else:
+            msg = "No new example transcripts found."
+        logger.info(msg)
+
+    def _shortcut_html_body(self, link: str):
+        template_html = (
+            "<html>"
+            "\n\t<body>"
+            '\n\t\t<script type="text/javascript">'
+            '\n\t\t\twindow.location.href = "%s";'
+            "\n\t\t</script>"
+            "\n\t</body>"
+            "\n</html>"
+        )
+        return template_html % link
 
     async def _download_section(self, section_name: str):
 
