@@ -14,6 +14,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## `v0.1.1`
+
+**Title:** Patch v0.1.1 \
+**Release Date:** 2022-01-28
+
+
+### Added
+- Created changelog. This can be found in the `docs/changelog/` folder.
+- Created version checker (latest version hosted on server).
+- Providing 4 seconds of left- and right-context to make annotating the edges easier.
+- Added example_transcripts in `data/` directory. This will automatically download
+  example transcript files and a hyperlink to the audio file when the application is
+  run. 
+
+### Changed
+- Bumped version number to `0.1.1`.
+
+### Fixed
+- Fix how special charaters, (e.g. "è") are loading from CTM file.
+
+
 ## `v0.1.0`
 
 **Title:** Initial Release \
