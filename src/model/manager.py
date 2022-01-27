@@ -545,7 +545,8 @@ class Manager:
                 # ... finish logger message.
                 msg += "\nThere are no new interview sections to request."
                 msg += "\nIf you would like to change your sections, please modify "
-                msg += "the file 'collaboration/my_sections.txt'."
+                msg += "the file 'collaboration/my_sections.txt' and restart the "
+                msg += "server."
                 logger.info(msg)
                 self.printed_no_new_sections = True
             # Reset flag, so we will try again shortly.
