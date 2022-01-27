@@ -15,6 +15,7 @@ class Manager:
     def __init__(
         self,
         VERSION_TUPLE: Tuple[int],
+        CONTEXT_SECS: float,
         TICK_INTERVAL: int,
         DATA_DIR: str,
         SUBJECT_MAPPING_PATH: str,
@@ -24,6 +25,7 @@ class Manager:
         DOWNLOAD_FAIL_TIMEOUT_SECS: float,
     ):
         self.VERSION_TUPLE = VERSION_TUPLE
+        self.CONTEXT_SECS = CONTEXT_SECS
         self.TICK_INTERVAL = TICK_INTERVAL
         self.DATA_DIR = DATA_DIR
         self.SUBJECT_MAPPING_PATH = SUBJECT_MAPPING_PATH
@@ -338,7 +340,7 @@ class Manager:
             return False  # success == False
 
         # Extract segments from CTM file and full WAV file.
-        msg = "Extracting segment TextGrid/WAV file for '%s'." % section_name
+        msg = "Extracting segment TextGrid/WAV file for '%s'..." % section_name
         logger.info(msg)
         try:
             converter = CtmConverter(
@@ -351,6 +353,7 @@ class Manager:
             await converter.write_textgrids_async(
                 textgrids_dir=output_dir,
                 audio_segments_dir=output_dir,
+                context_secs=self.CONTEXT_SECS,
             )
         except Exception as e:
             msg = "Failed to extract TextGrid/audio segments from the files '%s' and '%s'."
@@ -469,6 +472,9 @@ class Manager:
 
             if not has_moved_wav and not has_removed_tg:
                 msg = "Detected a new TextGrid: %s." % file_name
+                logger.info(msg)
+            if not has_moved_wav and has_removed_tg:
+                msg = "Detected a moved TextGrid: %s." % file_name
                 logger.info(msg)
 
             # 2. Move/delete the files if necessary.

@@ -22,6 +22,9 @@ def textgrid_to_utterance(textgrid_paths: List[str]):
             raise Exception("'words' tier is not an interval tier.")
         for entry in words_tier.entryList:
             value: str = entry[2]
-            words.extend(value.strip().split())
+            value = value.strip()
+            if value != "/CONTEXT/":  # Handle context intervals.
+                # Handle case where multiple words are in same interval.
+                words.extend(value.split())
 
     return " ".join(words)

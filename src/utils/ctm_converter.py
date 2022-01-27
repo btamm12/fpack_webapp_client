@@ -101,8 +101,8 @@ class CtmConverter:
             "utterance": self.lines_to_utterance(ctm_lines),
         }
 
-    def offset(self, value: float, offset: float):
-        return round(value + offset, 5)
+    def round(self, value: float):
+        return round(value, 5)
 
     def calculate_segment_end(
         self,
@@ -193,7 +193,11 @@ class CtmConverter:
         return " ".join(x.word for x in lines)
 
     async def write_textgrids_async(
-        self, textgrids_dir: str, audio_segments_dir: str, sleep_secs: float = 0.1
+        self,
+        textgrids_dir: str,
+        audio_segments_dir: str,
+        context_secs: float = 0,
+        sleep_secs: float = 0.1,
     ):
         # Create output directories.
         if not os.path.exists(textgrids_dir):
@@ -223,6 +227,12 @@ class CtmConverter:
             # Give other threads a chance to run.
             await asyncio.sleep(sleep_secs)
 
+            # Calculate start/end context duration. This will add X seconds to
+            # start/end of audio in order to provide a bit of context. Of course,
+            # this is not possible at the start/end of the file.
+            start_context = min(segment_start, context_secs)
+            end_context = min(audio_duration - segment_end, context_secs)
+
             # Calculate lines.
             filtered_lines = self.filter_lines(
                 ctm_lines,
@@ -236,8 +246,10 @@ class CtmConverter:
             # ==================== #
             # CREATE AUDIO SEGMENT #
             # ==================== #
-            audio_start = int(segment_start * fs)
-            audio_end = min(int(segment_end * fs), len(audio_data))
+
+            # Make sure we include the context audio!
+            audio_start = max(int((segment_start - start_context) * fs), 0)
+            audio_end = min(int((segment_end + end_context) * fs), len(audio_data))
             audio_segment_data = audio_data[audio_start:audio_end]
             audio_segment_path = os.path.join(
                 audio_segments_dir,
@@ -251,26 +263,65 @@ class CtmConverter:
             tg = textgrid.Textgrid()
 
             minT = 0
-            maxT = self.offset(segment_end, -segment_start)
+            maxT = self.round(segment_end - segment_start + start_context + end_context)
+
+            # Construct entries for each tier.
+            utt_entries = [
+                (
+                    self.round(minT + start_context),
+                    self.round(maxT - end_context),
+                    segment_utterance,
+                )
+            ]
+            word_entries = [
+                x.word_entry(offset=-segment_start + start_context)
+                for x in filtered_lines
+            ]
+            score_entries = [
+                x.score_entry(offset=-segment_start + start_context)
+                for x in filtered_lines
+            ]
+
+            # Add an entry for each context area in the 3 tiers.
+            if start_context > 0:
+                entry_times = (self.round(minT), self.round(start_context))
+                # Utt tier.
+                entry = (*entry_times, "Start context: do not annotate this part!")
+                utt_entries.insert(0, entry)
+                # Word tier.
+                entry = (*entry_times, "/CONTEXT/")
+                word_entries.insert(0, entry)
+                # Score tier.
+                entry = (*entry_times, "/")
+                score_entries.insert(0, entry)
+            if end_context > 0:
+                entry_times = (self.round(maxT - end_context), self.round(maxT))
+                # Utt tier.
+                entry = (*entry_times, "End context: do not annotate this part!")
+                utt_entries.append(entry)
+                # Word tier.
+                entry = (*entry_times, "/CONTEXT/")
+                word_entries.append(entry)
+                # Score tier.
+                entry = (*entry_times, "/")
+                score_entries.append(entry)
 
             # Create the Tiers.
             utt_tier = textgrid.IntervalTier(
                 name="utterance",
-                entryList=[(minT, maxT, segment_utterance)],
+                entryList=utt_entries,
                 minT=minT,
                 maxT=maxT,
             )
             word_tier = textgrid.IntervalTier(
                 name="words",
-                entryList=[x.word_entry(offset=-segment_start) for x in filtered_lines],
+                entryList=word_entries,
                 minT=minT,
                 maxT=maxT,
             )
             score_tier = textgrid.IntervalTier(
                 name="scores",
-                entryList=[
-                    x.score_entry(offset=-segment_start) for x in filtered_lines
-                ],
+                entryList=score_entries,
                 minT=minT,
                 maxT=maxT,
             )

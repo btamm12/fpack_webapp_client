@@ -42,11 +42,12 @@ version_tuple = tuple(version_str.split("."))
 app = Sanic(__name__)
 
 # Tick interval, measured in seconds.
-TICK_INTERVAL = 5
+TICK_INTERVAL = 3
 
 # Create manager.
 mng = Manager(
     VERSION_TUPLE=version_tuple,
+    CONTEXT_SECS=4,
     TICK_INTERVAL=TICK_INTERVAL,
     DATA_DIR=os.path.join(ROOT_DIR, "data"),
     SUBJECT_MAPPING_PATH=subject_mapping_path,
