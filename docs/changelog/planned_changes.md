@@ -9,8 +9,9 @@
 ### Added
 - **Finished:**
   - Created changelog. This can be found in the `docs/changelog/` folder.
-- **Work In Progress:**
   - use version checker (latest version hosted on public_html/)
+- **Work In Progress:**
+  - ...
 - **To-Do:**
   - provide left/right context with specific tags (1-2 seconds)
     - EDIT: maybe ~3 seconds cause it's hard to tell if it's the end of the sentence
@@ -27,7 +28,7 @@
 
 ### Changed
 - **Finished:**
-  - ...
+  - bumped version number to 0.1.1
 - **Work In Progress:**
   - ...
 - **To-Do:**
