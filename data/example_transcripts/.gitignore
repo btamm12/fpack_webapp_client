@@ -1,0 +1,2 @@
+# Don't push hyperlink HTML files.
+*.html

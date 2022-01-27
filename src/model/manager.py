@@ -1,19 +1,21 @@
-import aiohttp
 import aiofiles
+import aiohttp
 import asyncio
 from datetime import datetime, timedelta
 import glob
 import os
-from time import time
+from typing import Tuple
 
 from .state import State
-from logger import logger, log_exception
+from logger import log_exception, logger
 from utils import CtmConverter, textgrid_to_utterance
 
 
 class Manager:
     def __init__(
         self,
+        VERSION_TUPLE: Tuple[int],
+        CONTEXT_SECS: float,
         TICK_INTERVAL: int,
         DATA_DIR: str,
         SUBJECT_MAPPING_PATH: str,
@@ -22,6 +24,8 @@ class Manager:
         SERVER_URL_BASE: str,
         DOWNLOAD_FAIL_TIMEOUT_SECS: float,
     ):
+        self.VERSION_TUPLE = VERSION_TUPLE
+        self.CONTEXT_SECS = CONTEXT_SECS
         self.TICK_INTERVAL = TICK_INTERVAL
         self.DATA_DIR = DATA_DIR
         self.SUBJECT_MAPPING_PATH = SUBJECT_MAPPING_PATH
@@ -53,6 +57,10 @@ class Manager:
         self.dir_difficult_to_annotate = os.path.join(
             DATA_DIR,
             "difficult_to_annotate",
+        )
+        self.dir_example_transcripts = os.path.join(
+            DATA_DIR,
+            "example_transcripts",
         )
         self.dir_tmp = os.path.join(DATA_DIR, "tmp")
 
@@ -90,6 +98,12 @@ class Manager:
         # THE STATE VARIABLES BELOW SHOULD BE RESET ON RESTART! #
         # ===================================================== #
 
+        # Has the version been checked?
+        self.has_checked_version: bool = False
+
+        # Has the application check for new example transcripts?
+        self.has_checked_example_transcripts = False
+
         # Boolean flag for printing.
         self.printed_no_new_sections: bool = False
 
@@ -101,6 +115,17 @@ class Manager:
         self.next_download_time: datetime = None
 
     async def tick(self):
+
+        # First tick: check version.
+        if not self.has_checked_version:
+            await self._check_version()
+            self.has_checked_version = True
+
+        # First tick: check for new example transcripts.
+        if not self.has_checked_example_transcripts:
+            await self._check_example_transcripts()
+            self.has_checked_example_transcripts = True
+
         # 1. Check if new data needs to be downloaded.
         await self._check_for_new_data()
 
@@ -144,6 +169,7 @@ class Manager:
             (self.dir_03_generated_transcripts, "03_generated_transcripts"),
             (self.dir_04_submitted_transcripts, "04_submitted_transcripts"),
             (self.dir_difficult_to_annotate, "difficult_to_annotate"),
+            (self.dir_example_transcripts, "example_transcripts"),
             (self.dir_tmp, "tmp"),
         ]
         for args in args_list:
@@ -163,6 +189,188 @@ class Manager:
         if len(sections_01) < 2 and not self.is_requesting_data:
             self.is_requesting_data = True
             loop.create_task(self._start_requesting_data())
+
+    async def _check_version(self):
+        # URL.
+        VERSION_URL = "/".join(
+            (self.SERVER_URL_BASE, "version/latest_client_version.txt")
+        )
+
+        # Convert current version to string.
+        cur_version_str = "v" + ".".join(self.VERSION_TUPLE)
+
+        # Fetch version txt file: contains "x.x.x".
+        msg = "Checking for updates..."
+        logger.info(msg)
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(VERSION_URL) as resp:
+                    if resp.status == 200:
+                        latest_version_str = await resp.text()
+                        latest_version_tuple = tuple(latest_version_str.split("."))
+                        if latest_version_tuple > self.VERSION_TUPLE:
+                            msg = "A new version v%s is available!"
+                            msg %= latest_version_str
+                            logger.warning(msg)
+                            msg = "You can upgrade by using the 'git pull' command in a terminal (Linux) or in Git Bash (Windows)."
+                            logger.warning(msg)
+                            msg = "Make sure you 'cd' to the repository first!"
+                            logger.warning(msg)
+                        elif latest_version_tuple == self.VERSION_TUPLE:
+                            msg = "Latest version v%s is installed."
+                            msg %= latest_version_str
+                            logger.info(msg)
+                        else:
+                            msg = "Something went wrong! The server says the latest version is v%s, but version %s is installed!"
+                            msg %= (latest_version_str, cur_version_str)
+                            logger.error(msg)
+                    else:
+                        status_str = str(resp.status)
+                        body_str = await resp.text()
+                        msg = "Failed to get latest version from '%s'" % VERSION_URL
+                        msg += "Server returned status code %s." % status_str
+                        msg += "Response text: %s" % body_str
+                        logger.error(msg)
+
+        except Exception as e:
+            msg = "Failed to get latest version from '%s'" % VERSION_URL
+            logger.error(msg)
+            log_exception(logger, e)
+
+    async def _check_example_transcripts(self):
+
+        # URL.
+        EXAMPLE_SECTIONS_URL = "/".join(
+            (
+                self.SERVER_URL_BASE,
+                "data/fpack/example_transcripts",
+                "example_sections.txt",
+            )
+        )
+
+        # Fetch example_sections txt file.
+        example_sections = None
+        msg = "Checking for new example transcripts..."
+        logger.info(msg)
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(EXAMPLE_SECTIONS_URL) as resp:
+                    if resp.status == 200:
+                        resp_text = await resp.text()
+                        example_sections = [
+                            x.strip() for x in resp_text.split(sep="\n")
+                        ]
+                    else:
+                        status_str = str(resp.status)
+                        body_str = await resp.text()
+                        msg = "Failed to get example sections from '%s'"
+                        msg %= EXAMPLE_SECTIONS_URL
+                        msg += "Server returned status code %s." % status_str
+                        msg += "Response text: %s" % body_str
+                        logger.error(msg)
+
+        except Exception as e:
+            msg = "Failed to get example sections from '%s'" % EXAMPLE_SECTIONS_URL
+            logger.error(msg)
+            log_exception(logger, e)
+
+        # If we failed to get the sections, exit.
+        if example_sections is None:
+            return
+
+        # Fetch any new sections.
+        def only_txt(x: str):
+            return os.path.splitext(x)[1] == ".txt"
+
+        new_file_found = False
+        downloaded_examples = os.listdir(self.dir_example_transcripts)
+        downloaded_examples = set(filter(only_txt, downloaded_examples))
+        for section_name in example_sections:
+            if (section_name + ".txt") not in downloaded_examples:
+                # Flag for logging.
+                new_file_found = True
+
+                # Extract subject name.
+                subject_name = section_name.split("_")[0]
+
+                # URLs.
+                TRANSCRIPT_URL = "/".join(
+                    (
+                        self.SERVER_URL_BASE,
+                        "data/fpack/example_transcripts",
+                        self.subject_mapping[subject_name],
+                        subject_name,
+                        section_name + ".txt",
+                    )
+                )
+                WAV_URL = "/".join(
+                    (
+                        self.SERVER_URL_BASE,
+                        "data/fpack/audio/int16",
+                        self.subject_mapping[subject_name],
+                        subject_name,
+                        section_name + ".wav",
+                    )
+                )
+
+                # Save paths.
+                TRANSCRIPT_PATH = os.path.join(
+                    self.dir_example_transcripts,
+                    section_name + ".txt",
+                )
+                WAV_LINK_PATH = os.path.join(
+                    self.dir_example_transcripts,
+                    section_name + "_WAV.html",
+                )
+
+                # Fetch transcript file.
+                msg = "> Downloading example transcript: '%s'..." % section_name
+                logger.info(msg)
+                try:
+                    async with aiohttp.ClientSession() as session:
+                        async with session.get(TRANSCRIPT_URL) as resp:
+                            if resp.status == 200:
+                                f = await aiofiles.open(TRANSCRIPT_PATH, mode="wb")
+                                await f.write(await resp.read())
+                                await f.close()
+                                f = await aiofiles.open(WAV_LINK_PATH, mode="w")
+                                await f.write(self._shortcut_html_body(WAV_URL))
+                                await f.close()
+                            else:
+                                status_str = str(resp.status)
+                                body_str = await resp.text()
+                                msg = (
+                                    "Failed to download txt file from '%s'"
+                                    % TRANSCRIPT_URL
+                                )
+                                msg += "Server returned status code %s." % status_str
+                                msg += "Response text: %s" % body_str
+                                logger.error(msg)
+
+                except Exception as e:
+                    msg = "Failed to download txt file from '%s' and save to '%s', and create shortcut '%s'."
+                    msg %= (TRANSCRIPT_URL, TRANSCRIPT_PATH, WAV_LINK_PATH)
+                    logger.error(msg)
+                    log_exception(logger, e)
+                    return
+
+        if new_file_found:
+            msg = "Finished downloading example transcripts."
+        else:
+            msg = "No new example transcripts found."
+        logger.info(msg)
+
+    def _shortcut_html_body(self, link: str):
+        template_html = (
+            "<html>"
+            "\n\t<body>"
+            '\n\t\t<script type="text/javascript">'
+            '\n\t\t\twindow.location.href = "%s";'
+            "\n\t\t</script>"
+            "\n\t</body>"
+            "\n</html>"
+        )
+        return template_html % link
 
     async def _download_section(self, section_name: str):
 
@@ -215,6 +423,7 @@ class Manager:
         except Exception as e:
             msg = "Failed to download CTM file from '%s' and save to '%s'."
             msg %= (CTM_URL, CTM_PATH)
+            logger.error(msg)
             log_exception(logger, e)
             return False  # success == False
 
@@ -239,6 +448,7 @@ class Manager:
         except Exception as e:
             msg = "Failed to download WAV file from '%s' and save to '%s'."
             msg %= (WAV_URL, WAV_PATH)
+            logger.error(msg)
             log_exception(logger, e)
             return False  # success == False
 
@@ -278,7 +488,7 @@ class Manager:
             return False  # success == False
 
         # Extract segments from CTM file and full WAV file.
-        msg = "Extracting segment TextGrid/WAV file for '%s'." % section_name
+        msg = "Extracting segment TextGrid/WAV file for '%s'..." % section_name
         logger.info(msg)
         try:
             converter = CtmConverter(
@@ -291,10 +501,12 @@ class Manager:
             await converter.write_textgrids_async(
                 textgrids_dir=output_dir,
                 audio_segments_dir=output_dir,
+                context_secs=self.CONTEXT_SECS,
             )
         except Exception as e:
             msg = "Failed to extract TextGrid/audio segments from the files '%s' and '%s'."
             msg %= (ctm_path, wav_path)
+            logger.error(msg)
             log_exception(logger, e)
             return False  # success == False
 
@@ -304,12 +516,6 @@ class Manager:
 
         # success == True
         return True
-
-    def _remove_file(self, path: str):
-        try:
-            os.remove(path)
-        except:
-            pass
 
     def _generate_transcripts(self):
 
@@ -355,7 +561,7 @@ class Manager:
                 if os.path.exists(transcript_path):
                     msg = "Transcript already exists! Overwriting..."
                     logger.warning(msg)
-                with open(transcript_path, "w") as f:
+                with open(transcript_path, encoding="utf-8", mode="w") as f:
                     f.write(utt)
 
                 # Remove TextGrid and WAV files from 02_corrected_textgrids. The
@@ -415,6 +621,9 @@ class Manager:
             if not has_moved_wav and not has_removed_tg:
                 msg = "Detected a new TextGrid: %s." % file_name
                 logger.info(msg)
+            if not has_moved_wav and has_removed_tg:
+                msg = "Detected a moved TextGrid: %s." % file_name
+                logger.info(msg)
 
             # 2. Move/delete the files if necessary.
             if not has_moved_wav:
@@ -453,6 +662,12 @@ class Manager:
                     logger.error(msg)
                     log_exception(logger, e)
 
+    def _remove_file(self, path: str):
+        try:
+            os.remove(path)
+        except:
+            pass
+
     async def _start_requesting_data(self):
 
         # Are we waiting for failed download timeout?
@@ -478,7 +693,8 @@ class Manager:
                 # ... finish logger message.
                 msg += "\nThere are no new interview sections to request."
                 msg += "\nIf you would like to change your sections, please modify "
-                msg += "the file 'collaboration/my_sections.txt'."
+                msg += "the file 'collaboration/my_sections.txt' and restart the "
+                msg += "server."
                 logger.info(msg)
                 self.printed_no_new_sections = True
             # Reset flag, so we will try again shortly.

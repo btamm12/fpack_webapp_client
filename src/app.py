@@ -27,15 +27,27 @@ if not os.path.exists(my_sections_path):
     print(msg)
     exit(0)
 
+# Load version file.
+version_path = os.path.join(ROOT_DIR, "version.txt")
+if not os.path.exists(version_path):
+    msg = "The version.txt file could not be found! Exiting program..."
+    print(msg)
+    exit(1)
+with open(version_path, "r") as f:
+    version_str = f.readline().strip()
+version_tuple = tuple(version_str.split("."))
+
 
 # Create Sanic app.
 app = Sanic(__name__)
 
 # Tick interval, measured in seconds.
-TICK_INTERVAL = 5
+TICK_INTERVAL = 3
 
 # Create manager.
 mng = Manager(
+    VERSION_TUPLE=version_tuple,
+    CONTEXT_SECS=4,
     TICK_INTERVAL=TICK_INTERVAL,
     DATA_DIR=os.path.join(ROOT_DIR, "data"),
     SUBJECT_MAPPING_PATH=subject_mapping_path,
