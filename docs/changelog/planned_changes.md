@@ -52,11 +52,12 @@
 
 ### Fixed
 - **Finished:**
-  - ...
+  - fix how special charaters, e.g. "è" are loading from CTM file
 - **Work In Progress:**
   - ...
 - **To-Do:**
-  - fix how special charaters, e.g. "è" are loading from CTM file
+  - ...
+
 
 ### Security
 - **Finished:**
