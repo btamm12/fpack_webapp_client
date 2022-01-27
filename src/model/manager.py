@@ -7,7 +7,7 @@ import os
 from typing import Tuple
 
 from .state import State
-from logger import logger, log_exception
+from logger import log_exception, logger
 from utils import CtmConverter, textgrid_to_utterance
 
 
