@@ -1,10 +1,10 @@
-import aiohttp
 import aiofiles
+import aiohttp
 import asyncio
 from datetime import datetime, timedelta
 import glob
 import os
-from time import time
+from typing import Tuple
 
 from .state import State
 from logger import logger, log_exception
@@ -14,6 +14,7 @@ from utils import CtmConverter, textgrid_to_utterance
 class Manager:
     def __init__(
         self,
+        VERSION_TUPLE: Tuple[int],
         TICK_INTERVAL: int,
         DATA_DIR: str,
         SUBJECT_MAPPING_PATH: str,
@@ -22,6 +23,7 @@ class Manager:
         SERVER_URL_BASE: str,
         DOWNLOAD_FAIL_TIMEOUT_SECS: float,
     ):
+        self.VERSION_TUPLE = VERSION_TUPLE
         self.TICK_INTERVAL = TICK_INTERVAL
         self.DATA_DIR = DATA_DIR
         self.SUBJECT_MAPPING_PATH = SUBJECT_MAPPING_PATH
@@ -90,6 +92,9 @@ class Manager:
         # THE STATE VARIABLES BELOW SHOULD BE RESET ON RESTART! #
         # ===================================================== #
 
+        # Has the version been checked?
+        self.has_checked_version: bool = False
+
         # Boolean flag for printing.
         self.printed_no_new_sections: bool = False
 
@@ -101,6 +106,12 @@ class Manager:
         self.next_download_time: datetime = None
 
     async def tick(self):
+
+        # First tick: check version.
+        if not self.has_checked_version:
+            await self._check_version()
+            self.has_checked_version = True
+
         # 1. Check if new data needs to be downloaded.
         await self._check_for_new_data()
 
@@ -164,6 +175,53 @@ class Manager:
             self.is_requesting_data = True
             loop.create_task(self._start_requesting_data())
 
+    async def _check_version(self):
+        # URL.
+        VERSION_URL = "/".join(
+            (self.SERVER_URL_BASE, "version/latest_client_version.txt")
+        )
+
+        # Convert current version to string.
+        cur_version_str = "v" + ".".join(self.VERSION_TUPLE)
+
+        # Fetch version txt file: contains "x.x.x".
+        msg = "Checking for updates..."
+        logger.info(msg)
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(VERSION_URL) as resp:
+                    if resp.status == 200:
+                        latest_version_str = await resp.text()
+                        latest_version_tuple = tuple(latest_version_str.split("."))
+                        if latest_version_tuple > self.VERSION_TUPLE:
+                            msg = "A new version v%s is available!"
+                            msg %= latest_version_str
+                            logger.warning(msg)
+                            msg = "You can upgrade by using the 'git pull' command in a terminal (Linux) or in Git Bash (Windows)."
+                            logger.warning(msg)
+                            msg = "Make sure you 'cd' to the repository first!"
+                            logger.warning(msg)
+                        elif latest_version_tuple == self.VERSION_TUPLE:
+                            msg = "Latest version v%s is installed."
+                            msg %= latest_version_str
+                            logger.info(msg)
+                        else:
+                            msg = "Something went wrong! The server says the latest version is v%s, but version %s is installed!"
+                            msg %= (latest_version_str, cur_version_str)
+                            logger.error(msg)
+                    else:
+                        status_str = str(resp.status)
+                        body_str = await resp.text()
+                        msg = "Failed to get latest version from '%s'" % VERSION_URL
+                        msg += "Server returned status code %s." % status_str
+                        msg += "Response text: %s" % body_str
+                        logger.error(msg)
+
+        except Exception as e:
+            msg = "Failed to get latest version from '%s'" % VERSION_URL
+            logger.error(msg)
+            log_exception(logger, e)
+
     async def _download_section(self, section_name: str):
 
         # Extract subject name.
@@ -215,6 +273,7 @@ class Manager:
         except Exception as e:
             msg = "Failed to download CTM file from '%s' and save to '%s'."
             msg %= (CTM_URL, CTM_PATH)
+            logger.error(msg)
             log_exception(logger, e)
             return False  # success == False
 
@@ -239,6 +298,7 @@ class Manager:
         except Exception as e:
             msg = "Failed to download WAV file from '%s' and save to '%s'."
             msg %= (WAV_URL, WAV_PATH)
+            logger.error(msg)
             log_exception(logger, e)
             return False  # success == False
 
@@ -295,6 +355,7 @@ class Manager:
         except Exception as e:
             msg = "Failed to extract TextGrid/audio segments from the files '%s' and '%s'."
             msg %= (ctm_path, wav_path)
+            logger.error(msg)
             log_exception(logger, e)
             return False  # success == False
 
