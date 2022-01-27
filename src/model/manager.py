@@ -413,7 +413,7 @@ class Manager:
                 if os.path.exists(transcript_path):
                     msg = "Transcript already exists! Overwriting..."
                     logger.warning(msg)
-                with open(transcript_path, "w") as f:
+                with open(transcript_path, encoding="utf-8", mode="w") as f:
                     f.write(utt)
 
                 # Remove TextGrid and WAV files from 02_corrected_textgrids. The

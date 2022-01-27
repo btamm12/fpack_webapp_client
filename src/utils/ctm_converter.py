@@ -44,7 +44,7 @@ class CtmConverter:
         self.MIN_WORD_SEC = MIN_WORD_SEC
 
         # Parse lines.
-        with open(ctm_path, "r") as f:
+        with open(ctm_path, encoding="utf-8", mode="r") as f:
             ctm_lines = [CtmLine(use_ref, line=line) for line in f]
 
         # Append silences.
