@@ -20,10 +20,10 @@
       just give a warning "MISSING CONTEXT ANNOTATION '[CONTEXT FROM NEXT/PREV SEGMENT!
       DO NOT ANNOTATE]' AT END/BEGINNING OF TextGrid FILE XXX.TextGrid! PLS FIX"
 - **Work In Progress:**
-  - ...
-- **To-Do:**
   - add example_transcripts (s92 stored on GitHub, as soon as mapping available, fetch
     example from server)
+- **To-Do:**
+  - ...
 
 
 ### Changed
