@@ -1,2 +1,5 @@
 # Don't push transcription .txt files.
 *.txt
+
+# Don't push hyperlink .html files.
+*.html

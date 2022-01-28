@@ -9,9 +9,9 @@
 
 ### Added
 - **Finished:**
-  - ...
-- **Work In Progress:**
   - add hyperlink to audio file when user finishes transcript
+- **Work In Progress:**
+  - ...
 - **To-Do:**
   - ...
 

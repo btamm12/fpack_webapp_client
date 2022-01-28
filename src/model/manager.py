@@ -303,15 +303,7 @@ class Manager:
                         section_name + ".txt",
                     )
                 )
-                WAV_URL = "/".join(
-                    (
-                        self.SERVER_URL_BASE,
-                        "data/fpack/audio/int16",
-                        self.subject_mapping[subject_name],
-                        subject_name,
-                        section_name + ".wav",
-                    )
-                )
+                WAV_URL = self._wav_url(section_name)
 
                 # Save paths.
                 TRANSCRIPT_PATH = os.path.join(
@@ -387,15 +379,7 @@ class Manager:
                 section_name + ".ctm",
             )
         )
-        WAV_URL = "/".join(
-            (
-                self.SERVER_URL_BASE,
-                "data/fpack/audio/int16",
-                self.subject_mapping[subject_name],
-                subject_name,
-                section_name + ".wav",
-            )
-        )
+        WAV_URL = self._wav_url(section_name)
 
         # Save paths.
         CTM_PATH = os.path.join(self.dir_tmp, section_name + ".ctm")
@@ -530,14 +514,14 @@ class Manager:
         # Check if there are sections in the "02_corrected_textgrids" directory that
         # no longer exist in the "01_annotate_me" directory, i.e. the section is
         # completely annotated.
-        for section in sections_02:
+        for section_name in sections_02:
 
-            if section not in sections_01:
-                msg = "Detected finished interview section '%s'!" % section
+            if section_name not in sections_01:
+                msg = "Detected finished interview section '%s'!" % section_name
                 logger.info(msg)
 
                 # Construct utterance from TextGrid files.
-                glob_name = "%s_*.TextGrid" % section
+                glob_name = "%s_*.TextGrid" % section_name
                 glob_path = os.path.join(self.dir_02_corrected_textgrids, glob_name)
                 textgrid_paths = sorted(glob.glob(glob_path))
                 if len(textgrid_paths) == 0:
@@ -551,24 +535,35 @@ class Manager:
                 logger.info(msg)
                 utt = textgrid_to_utterance(textgrid_paths)
 
-                # Save result in 03_generated_transcripts.
-                transcript_name = "%s.txt" % section
-                transcript_path = os.path.join(
-                    self.dir_03_generated_transcripts, transcript_name
+                # URL to original audio file on server.
+                WAV_URL = self._wav_url(section_name)
+
+                # Paths.
+                TRANSCRIPT_PATH = os.path.join(
+                    self.dir_03_generated_transcripts, "%s.txt" % section_name
                 )
-                msg = "Saving transcript to %s" % transcript_path
+                WAV_LINK_PATH = os.path.join(
+                    self.dir_03_generated_transcripts, "%s_WAV.html" % section_name
+                )
+
+                # Save transcript in 03_generated_transcripts.
+                msg = "Saving transcript to '%s'" % TRANSCRIPT_PATH
                 logger.info(msg)
-                if os.path.exists(transcript_path):
+                if os.path.exists(TRANSCRIPT_PATH):
                     msg = "Transcript already exists! Overwriting..."
                     logger.warning(msg)
-                with open(transcript_path, encoding="utf-8", mode="w") as f:
+                with open(TRANSCRIPT_PATH, encoding="utf-8", mode="w") as f:
                     f.write(utt)
+
+                # Save link to audio file.
+                with open(WAV_LINK_PATH, mode="w") as f:
+                    f.write(self._shortcut_html_body(WAV_URL))
 
                 # Remove TextGrid and WAV files from 02_corrected_textgrids. The
                 # files from 01_annotate_me have already been removed by
                 # `_move_corrected_textgrids()`.
-                glob_name_textgrid = "%s_*.TextGrid" % section
-                glob_name_wav = "%s_*.wav" % section
+                glob_name_textgrid = "%s_*.TextGrid" % section_name
+                glob_name_wav = "%s_*.wav" % section_name
                 glob_path_textgrid = os.path.join(
                     self.dir_02_corrected_textgrids, glob_name_textgrid
                 )
@@ -744,3 +739,20 @@ class Manager:
 
         # Reset flag, so we are able to request more data later.
         self.is_requesting_data = False
+
+    def _wav_url(self, section_name: str):
+        # Extract subject name.
+        subject_name = section_name.split("_")[0]
+
+        # URL of WAV file on server.
+        WAV_URL = "/".join(
+            (
+                self.SERVER_URL_BASE,
+                "data/fpack/audio/int16",
+                self.subject_mapping[subject_name],
+                subject_name,
+                section_name + ".wav",
+            )
+        )
+
+        return WAV_URL
