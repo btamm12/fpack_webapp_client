@@ -162,7 +162,7 @@ class CtmConverter:
     def filter_lines(
         self, lines: List[CtmLine], start_time: float = None, end_time: float = None
     ):
-        eps = 1e-6
+        eps = 1e-3
         filtered = False
         # Filter words occurring after `start_time`.
         if start_time is not None:
@@ -232,6 +232,8 @@ class CtmConverter:
             # this is not possible at the start/end of the file.
             start_context = min(segment_start, context_secs)
             end_context = min(audio_duration - segment_end, context_secs)
+            start_context = self.round(start_context)
+            end_context = self.round(end_context)
 
             # Calculate lines.
             filtered_lines = self.filter_lines(

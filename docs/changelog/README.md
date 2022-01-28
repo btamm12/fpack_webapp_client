@@ -96,7 +96,7 @@ the MAJOR version number.
 - **Work In Progress:**
   - ...
 - **To-Do:**
-  -  ...
+  -  bump version to [N].x.x
 
 ### Deprecated
 - **Finished:**

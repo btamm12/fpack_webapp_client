@@ -14,6 +14,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## `0.1.2`
+
+**Title:** Patch 0.1.2 \
+**Release Date:** 2022-01-28
+
+### Added
+- added hyperlink to audio file when user finishes transcript
+- added bump version in planned_changes template
+
+### Changed
+- bumped version to v0.1.2
+
+### Fixed
+- Fixed an error where final end_context interval (which should not exist) was trying
+  to be created. praatio did not like the fact that the interval start time was
+  equal to the TextGrid max time. This ended up being a small rounding error.
+
+
 ## `v0.1.1`
 
 **Title:** Patch v0.1.1 \
