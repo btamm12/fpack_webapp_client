@@ -11,9 +11,9 @@
 - **Finished:**
   - ...
 - **Work In Progress:**
-  - ...
+  - add hyperlink to audio file when user finishes transcript
 - **To-Do:**
-  -  add hyperlink to audio file when user finishes transcript
+  - ...
 
 ### Changed
 - **Finished:**
