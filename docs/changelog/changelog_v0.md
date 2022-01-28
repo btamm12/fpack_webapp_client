@@ -27,9 +27,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - bumped version to v0.1.2
 
 ### Fixed
-- Fix an error where final end_context interval (which should not exist) was trying
+- Fixed an error where final end_context interval (which should not exist) was trying
   to be created. praatio did not like the fact that the interval start time was
-  equal to the TextGrid max time. This was a small rounding error.
+  equal to the TextGrid max time. This ended up being a small rounding error.
 
 
 ## `v0.1.1`
