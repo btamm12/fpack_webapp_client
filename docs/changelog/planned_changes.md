@@ -41,10 +41,6 @@
 
 ### Fixed
 - **Finished:**
-  - ...
-- **Work In Progress:**
-  - ...
-- **To-Do:**
   - Fix this exception:
     ```
     Traceback (most recent call last):
@@ -56,6 +52,10 @@
         raise errors.TextgridStateError(
     praatio.utilities.errors.TextgridStateError: The start time of an interval (20.53933) cannot occur after its end time (20.53933)
     ```
+- **Work In Progress:**
+  - ...
+- **To-Do:**
+  - ...
 
 ### Security
 - **Finished:**
