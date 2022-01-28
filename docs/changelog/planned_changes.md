@@ -66,6 +66,64 @@
   -  ...
 
 
+## `0.1.3`
+
+**Title:** Patch 0.1.3 \
+**Release Date:** N/A
+
+### Added
+- **Finished:**
+  - ...
+- **Work In Progress:**
+  - ...
+- **To-Do:**
+  - ...
+
+### Changed
+- **Finished:**
+  - ...
+- **Work In Progress:**
+  - ...
+- **To-Do:**
+  -  ...
+
+### Deprecated
+- **Finished:**
+  - ...
+- **Work In Progress:**
+  - ...
+- **To-Do:**
+  -  ...
+
+### Removed
+- **Finished:**
+  - ...
+- **Work In Progress:**
+  - ...
+- **To-Do:**
+  -  ...
+
+### Fixed
+- **Finished:**
+  - ...
+- **Work In Progress:**
+  - ...
+- **To-Do:**
+  - Instead of using round() everywhere in CtmLine and CtmConverter (to avoid
+    praatio's warnings of "start cannot exceed end" when the difference is due to
+    extremely small floating point addition errors), we should change the sensitive
+    parts with more of a clamp function.
+    ```
+
+### Security
+- **Finished:**
+  - ...
+- **Work In Progress:**
+  - ...
+- **To-Do:**
+  -  ...
+
+
 ## `v1.0.0`
 
 **Title:** - \
