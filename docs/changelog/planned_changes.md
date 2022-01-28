@@ -1,71 +1,5 @@
 # Planned Changes
 
-# Planned Changes
-
-## `0.1.2`
-
-**Title:** Patch 0.1.2 \
-**Release Date:** N/A
-
-### Added
-- **Finished:**
-  - add hyperlink to audio file when user finishes transcript
-- **Work In Progress:**
-  - ...
-- **To-Do:**
-  - ...
-
-### Changed
-- **Finished:**
-  - ...
-- **Work In Progress:**
-  - ...
-- **To-Do:**
-  -  ...
-
-### Deprecated
-- **Finished:**
-  - ...
-- **Work In Progress:**
-  - ...
-- **To-Do:**
-  -  ...
-
-### Removed
-- **Finished:**
-  - ...
-- **Work In Progress:**
-  - ...
-- **To-Do:**
-  -  ...
-
-### Fixed
-- **Finished:**
-  - Fix this exception:
-    ```
-    Traceback (most recent call last):
-      File "D:\Windows\GitHub\test\fpack_webapp_client\src\model\manager.py", line 501, in _extract_section_segments
-        await converter.write_textgrids_async(
-      File "D:\Windows\GitHub\test\fpack_webapp_client\src\utils\ctm_converter.py", line 310, in write_textgrids_async
-        utt_tier = textgrid.IntervalTier(
-      File "D:\Windows\GitHub\test\fpack_webapp_client\venv\lib\site-packages\praatio\data_classes\interval_tier.py", line 57, in __init__
-        raise errors.TextgridStateError(
-    praatio.utilities.errors.TextgridStateError: The start time of an interval (20.53933) cannot occur after its end time (20.53933)
-    ```
-- **Work In Progress:**
-  - ...
-- **To-Do:**
-  - ...
-
-### Security
-- **Finished:**
-  - ...
-- **Work In Progress:**
-  - ...
-- **To-Do:**
-  -  ...
-
-
 ## `0.1.3`
 
 **Title:** Patch 0.1.3 \
@@ -85,7 +19,7 @@
 - **Work In Progress:**
   - ...
 - **To-Do:**
-  -  ...
+  -  bump version to 0.1.3
 
 ### Deprecated
 - **Finished:**
@@ -144,6 +78,7 @@
 - **Work In Progress:**
   - ...
 - **To-Do:**
+  - bump version to v1.0.0
   - Create server URL with `v1` instead of `v0`.
   - Change server data symlink from
     ```
