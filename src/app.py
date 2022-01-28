@@ -1,7 +1,6 @@
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import logging
 import os
-from async_timeout import asyncio
 from sanic import Sanic
 from sanic.response import text
 from sanic.request import Request
