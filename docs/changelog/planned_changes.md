@@ -1,5 +1,71 @@
 # Planned Changes
 
+# Planned Changes
+
+## `0.1.2`
+
+**Title:** Patch 0.1.2 \
+**Release Date:** N/A
+
+### Added
+- **Finished:**
+  - ...
+- **Work In Progress:**
+  - ...
+- **To-Do:**
+  -  add hyperlink to audio file when user finishes transcript
+
+### Changed
+- **Finished:**
+  - ...
+- **Work In Progress:**
+  - ...
+- **To-Do:**
+  -  ...
+
+### Deprecated
+- **Finished:**
+  - ...
+- **Work In Progress:**
+  - ...
+- **To-Do:**
+  -  ...
+
+### Removed
+- **Finished:**
+  - ...
+- **Work In Progress:**
+  - ...
+- **To-Do:**
+  -  ...
+
+### Fixed
+- **Finished:**
+  - ...
+- **Work In Progress:**
+  - ...
+- **To-Do:**
+  - Fix this exception:
+    ```
+    Traceback (most recent call last):
+      File "D:\Windows\GitHub\test\fpack_webapp_client\src\model\manager.py", line 501, in _extract_section_segments
+        await converter.write_textgrids_async(
+      File "D:\Windows\GitHub\test\fpack_webapp_client\src\utils\ctm_converter.py", line 310, in write_textgrids_async
+        utt_tier = textgrid.IntervalTier(
+      File "D:\Windows\GitHub\test\fpack_webapp_client\venv\lib\site-packages\praatio\data_classes\interval_tier.py", line 57, in __init__
+        raise errors.TextgridStateError(
+    praatio.utilities.errors.TextgridStateError: The start time of an interval (20.53933) cannot occur after its end time (20.53933)
+    ```
+
+### Security
+- **Finished:**
+  - ...
+- **Work In Progress:**
+  - ...
+- **To-Do:**
+  -  ...
+
+
 ## `v1.0.0`
 
 **Title:** - \
