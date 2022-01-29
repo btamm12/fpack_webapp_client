@@ -19,11 +19,11 @@ be accurately transcribed in order to perform further Natural Language Processin
 ## 1.2. Documentation Contents
 
 This documentation outlines everything the annotator must know in order to contribute
-to this project. There are 7 sections:
+to this project. There are 8 sections:
 1. Overview (1 min)
 2. File Types (2 mins)
-3. Working With Praat (20 mins = video tutorial)
-4. Your Task As Annotator (4 mins + 8 mins = protocol)
+3. Working With Praat (1 min README + 20 mins tutorial playlist)
+4. Your Task As Annotator (4 mins README + 8 mins protocol + 9 mins example video)
 5. Request Subject Mapping (3 mins)
 6. Cooperation Between Annotators (3 mins)
 7. Sending Your Results (2 mins)
