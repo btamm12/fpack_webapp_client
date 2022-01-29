@@ -67,3 +67,15 @@ The language spoken by the participants is Dutch. We will therefore make use of 
 The protocol is detailed, and to make easier for the later NLP analysis, we will not
 include all of the rules. The selected rules are listed in the [protocol
 README](protocol/README.md). Read these in detail before starting the annotations!
+
+
+## 4.3. Annotation Example
+
+It may be useful to see the tool in action, so I have created a video in which
+a part of the interview section is annotated.
+
+If you click the image below, it will take you to that video. The duration is 9 minutes.
+
+**EXAMPLE VIDEO:**
+
+[![Annotation Example](https://img.youtube.com/vi/9HJH_Uqo1FA/0.jpg)](https://youtu.be/9HJH_Uqo1FA)
