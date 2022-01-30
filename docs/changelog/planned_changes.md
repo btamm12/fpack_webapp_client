@@ -43,12 +43,12 @@
 
 ### Fixed
 - **Finished:**
-  - ...
-- **Work In Progress:**
   - Instead of using round() everywhere in CtmLine and CtmConverter (to avoid
     praatio's warnings of "start cannot exceed end" when the difference is due to
     extremely small floating point addition errors), we should change the sensitive
     parts with more of a clamp function.
+- **Work In Progress:**
+  - ...
 - **To-Do:**
   - ...
     ```

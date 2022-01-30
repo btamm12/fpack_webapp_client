@@ -5,6 +5,7 @@ from typing import List
 from scipy.io import wavfile
 
 from .ctm_line import CtmLine
+from logger import logger
 
 
 class CtmConverter:
@@ -101,8 +102,65 @@ class CtmConverter:
             "utterance": self.lines_to_utterance(ctm_lines),
         }
 
-    def round(self, value: float):
-        return round(value, 5)
+    def _interval_to_str(self, start: float, end: float, value: str):
+        return "(start=%0.4f,end=%0.4f,value=%s)" % (start, end, value)
+
+    def _fix_rounding_errors(self, entries, minT, maxT):
+        new_entries = []
+        last_start = None
+        last_end = None
+        last_value = None
+        for start, end, value in entries:
+
+            # Make copies, so we can still log the original variables.
+            new_start = start
+            new_end = end
+
+            # Check valid start/end times. Print error message if error is too large.
+            eps = 1e-3
+            if new_start < minT:
+                if minT - new_start > eps:
+                    msg = "Problem with interval %s: start time is smaller than minT (%0.4f)."
+                    msg %= (self._interval_to_str(start, end, value), minT)
+                    logger.error(msg)
+                new_start = minT
+            if new_end > maxT:
+                if new_end - maxT > eps:
+                    msg = "Problem with interval %s: end time is larger than maxT (%0.4f)."
+                    msg %= (self._interval_to_str(start, end, value), maxT)
+                    logger.error(msg)
+                new_end = maxT
+
+            # Also check if this start time is not before the previous end time.
+            if last_end is not None and new_start < last_end:
+                if last_end - new_start > eps:
+                    msg = "Problem with consecutive intervals %s, %s: start time is smaller than previous end time."
+                    msg %= (
+                        self._interval_to_str(last_start, last_end, last_value),
+                        self._interval_to_str(start, end, value),
+                    )
+                    logger.error(msg)
+                new_start = last_end
+
+            # Make sure the interval is not zero-length!
+            if new_start > new_end - eps:
+                msg = "Problem with interval %s: interval duration collapses to 0 seconds."
+                msg += "Calculation used 'corrected interval' %s."
+                msg += "Removing interval..."
+                msg %= (
+                    self._interval_to_str(start, end, value),
+                    self._interval_to_str(new_start, new_end, value),
+                )
+                logger.error(msg)
+                continue
+
+            # Add the interval to the new entry list.
+            new_entries.append((new_start, new_end, value))
+
+            # Remember last interval.
+            last_start, last_end, last_value = start, end, value
+
+        return new_entries
 
     def calculate_segment_end(
         self,
@@ -123,7 +181,7 @@ class CtmConverter:
         if rest < max_offset:
             segment_end = audio_duration
 
-        return round(segment_end, 5)
+        return segment_end
 
     def get_nearest_bound(self, time: float, bound: str):
         # bound must be either "start" or "end"
@@ -221,7 +279,7 @@ class CtmConverter:
             segment_start,
             audio_duration,
         )
-        eps = 1e-2
+        eps = 1e-3
         while segment_start + eps < audio_duration:
 
             # Give other threads a chance to run.
@@ -232,8 +290,6 @@ class CtmConverter:
             # this is not possible at the start/end of the file.
             start_context = min(segment_start, context_secs)
             end_context = min(audio_duration - segment_end, context_secs)
-            start_context = self.round(start_context)
-            end_context = self.round(end_context)
 
             # Calculate lines.
             filtered_lines = self.filter_lines(
@@ -265,15 +321,11 @@ class CtmConverter:
             tg = textgrid.Textgrid()
 
             minT = 0
-            maxT = self.round(segment_end - segment_start + start_context + end_context)
+            maxT = segment_end - segment_start + start_context + end_context
 
             # Construct entries for each tier.
             utt_entries = [
-                (
-                    self.round(minT + start_context),
-                    self.round(maxT - end_context),
-                    segment_utterance,
-                )
+                (minT + start_context, maxT - end_context, segment_utterance)
             ]
             word_entries = [
                 x.word_entry(offset=-segment_start + start_context)
@@ -286,7 +338,7 @@ class CtmConverter:
 
             # Add an entry for each context area in the 3 tiers.
             if start_context > 0:
-                entry_times = (self.round(minT), self.round(start_context))
+                entry_times = (minT, start_context)
                 # Utt tier.
                 entry = (*entry_times, "Start context: do not annotate this part!")
                 utt_entries.insert(0, entry)
@@ -297,7 +349,7 @@ class CtmConverter:
                 entry = (*entry_times, "/")
                 score_entries.insert(0, entry)
             if end_context > 0:
-                entry_times = (self.round(maxT - end_context), self.round(maxT))
+                entry_times = (maxT - end_context, maxT)
                 # Utt tier.
                 entry = (*entry_times, "End context: do not annotate this part!")
                 utt_entries.append(entry)
@@ -307,6 +359,11 @@ class CtmConverter:
                 # Score tier.
                 entry = (*entry_times, "/")
                 score_entries.append(entry)
+
+            # Fix any rounding errors.
+            utt_entries = self._fix_rounding_errors(utt_entries, minT, maxT)
+            word_entries = self._fix_rounding_errors(word_entries, minT, maxT)
+            score_entries = self._fix_rounding_errors(score_entries, minT, maxT)
 
             # Create the Tiers.
             utt_tier = textgrid.IntervalTier(

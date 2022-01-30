@@ -57,7 +57,6 @@ class CtmLine:
         # Calculate end time.
         self.end = self.start + self.duration
 
-
     def _remove_filler(self, word: str):
         try:
             idx = word.index(",filler")
@@ -67,28 +66,12 @@ class CtmLine:
 
     def word_entry(self, offset: float = None):
         if offset is None:
-            return (
-                round(self.start, 5),
-                round(self.end, 5),
-                self.word,
-            )
+            return (self.start, self.end, self.word)
         else:
-            return (
-                round(self.start + offset, 5),
-                round(self.end + offset, 5),
-                self.word,
-            )
+            return (self.start + offset, self.end + offset, self.word)
 
     def score_entry(self, offset: float = None):
         if offset is None:
-            return (
-                round(self.start, 5),
-                round(self.end, 5),
-                "%0.2f" % self.score,
-            )
+            return (self.start, self.end, "%0.2f" % self.score)
         else:
-            return (
-                round(self.start + offset, 5),
-                round(self.end + offset, 5),
-                "%0.2f" % self.score,
-            )
+            return (self.start + offset, self.end + offset, "%0.2f" % self.score)
