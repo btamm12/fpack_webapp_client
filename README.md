@@ -111,8 +111,8 @@ You should coordinate with your fellow annotators about who will annotate which 
 Otherwise you might both annotate the same interviews, which would not be a great use
 of time!
 
-**You must select some interview sections before the tool will start working.** See
-the collaboration folder for more details.
+**You must set your name and select some interview sections before the tool will
+start working.** See the collaboration folder for more details.
 
 - [Collaboration Folder](collaboration/README.md)
 
