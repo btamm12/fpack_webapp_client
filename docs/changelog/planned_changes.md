@@ -1,8 +1,8 @@
 # Planned Changes
 
-## `0.1.3`
+## `0.2.0`
 
-**Title:** Patch 0.1.3 \
+**Title:** v0.2.0 \
 **Release Date:** N/A
 
 ### Added
@@ -11,7 +11,11 @@
 - **Work In Progress:**
   - ...
 - **To-Do:**
-  - ...
+  - add finished_sections.txt on server which lets the annotators know which sections
+    have been completed by whom
+  - add `finished_sections/` directory in `data/` which will be automatically
+    populated by transcripts and audio hyperlinks from `finished_sections.txt`
+
 
 ### Changed
 - **Finished:**
@@ -19,7 +23,7 @@
 - **Work In Progress:**
   - ...
 - **To-Do:**
-  -  bump version to 0.1.3
+  -  bump version to 0.2.0
 
 ### Deprecated
 - **Finished:**
