@@ -1,15 +1,15 @@
 [\[Back\]](./README.md) \
-🔲🔲🔲🔲🔲🔲🔲⏹ \
-[\[<---\]](./07_sending_your_results.md) \[--->\]
+🔲🔲🔲🔲🔲🔲🔲🔲⏹ \
+[\[<---\]](./08_sending_your_results.md) \[--->\]
 
-# 8. Future Work (Developers)
+# 9. Future Work (Developers)
 
 **This section is aimed towards the developers. It contains aspects of the project
 that can still be improved.**
 
-## 8.1. Proper Web Service
+## 9.1. Proper Web Service
 
-### 8.1.1. Security Concerns
+### 9.1.1. Security Concerns
 
 For security reasons, my ESAT web server
 ```
@@ -42,7 +42,7 @@ This is something I implemented with the "subject mapping" file. Thus, only some
 with the "subject mapping" file can locate a participant's data, even if he already
 knows that `sXXX` is the pseudonym for the desired participant "John Doe".
 
-### 8.1.2. Annotator Registration Process
+### 9.1.2. Annotator Registration Process
 
 Currently, the annotators need to cooperate to ensure they are not annotating the
 same files, which would be a waste of time.
@@ -54,13 +54,13 @@ When an admin grants the annotator access (by creating the account), they will b
 automatically sent the "subject mapping" file, which can be different for different
 users.
 
-### 8.1.3. Cooperation Between Annotators
+### 9.1.3. Cooperation Between Annotators
 
 Then they can select which sections they would like to annotate from the server. The
 server knows which users have selected which sections, so it can prevent a section
 from being selected twice.
 
-### 8.1.4. Submitting Condor Requests
+### 9.1.4. Submitting Condor Requests
 
 Currently, some intervention is needed by someone with ESAT account in order to
 create the CTM files.

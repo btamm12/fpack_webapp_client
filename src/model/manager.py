@@ -8,13 +8,14 @@ from typing import Tuple
 
 from .state import State
 from logger import log_exception, logger
-from utils import CtmConverter, textgrid_to_utterance
+from utils import CtmConverter, get_subject_name, textgrid_to_utterance
 
 
 class Manager:
     def __init__(
         self,
         VERSION_TUPLE: Tuple[int],
+        ANNOTATOR_NAME: str,
         CONTEXT_SECS: float,
         TICK_INTERVAL: int,
         DATA_DIR: str,
@@ -25,6 +26,7 @@ class Manager:
         DOWNLOAD_FAIL_TIMEOUT_SECS: float,
     ):
         self.VERSION_TUPLE = VERSION_TUPLE
+        self.ANNOTATOR_NAME = ANNOTATOR_NAME
         self.CONTEXT_SECS = CONTEXT_SECS
         self.TICK_INTERVAL = TICK_INTERVAL
         self.DATA_DIR = DATA_DIR
@@ -53,6 +55,10 @@ class Manager:
         self.dir_04_submitted_transcripts = os.path.join(
             DATA_DIR,
             "04_submitted_transcripts",
+        )
+        self.dir_05_review_me = os.path.join(
+            DATA_DIR,
+            "05_review_me",
         )
         self.dir_difficult_to_annotate = os.path.join(
             DATA_DIR,
@@ -104,6 +110,9 @@ class Manager:
         # Has the application check for new example transcripts?
         self.has_checked_example_transcripts = False
 
+        # Has the application check for new review transcripts?
+        self.has_checked_review_file = False
+
         # Boolean flag for printing.
         self.printed_no_new_sections: bool = False
 
@@ -125,6 +134,11 @@ class Manager:
         if not self.has_checked_example_transcripts:
             await self._check_example_transcripts()
             self.has_checked_example_transcripts = True
+
+        # First tick: check for new review transcripts.
+        if not self.has_checked_review_file:
+            await self._check_review_file()
+            self.has_checked_review_file = True
 
         # 1. Check if new data needs to be downloaded.
         await self._check_for_new_data()
@@ -168,6 +182,7 @@ class Manager:
             (self.dir_02_corrected_textgrids, "02_corrected_textgrids"),
             (self.dir_03_generated_transcripts, "03_generated_transcripts"),
             (self.dir_04_submitted_transcripts, "04_submitted_transcripts"),
+            (self.dir_05_review_me, "05_review_me"),
             (self.dir_difficult_to_annotate, "difficult_to_annotate"),
             (self.dir_example_transcripts, "example_transcripts"),
             (self.dir_tmp, "tmp"),
@@ -258,7 +273,7 @@ class Manager:
                     if resp.status == 200:
                         resp_text = await resp.text()
                         example_sections = [
-                            x.strip() for x in resp_text.split(sep="\n")
+                            x.strip() for x in resp_text.split(sep="\n") if x != ""
                         ]
                     else:
                         status_str = str(resp.status)
@@ -352,17 +367,134 @@ class Manager:
             msg = "No new example transcripts found."
         logger.info(msg)
 
-    def _shortcut_html_body(self, link: str):
-        template_html = (
-            "<html>"
-            "\n\t<body>"
-            '\n\t\t<script type="text/javascript">'
-            '\n\t\t\twindow.location.href = "%s";'
-            "\n\t\t</script>"
-            "\n\t</body>"
-            "\n</html>"
+    async def _check_review_file(self):
+
+        # URL.
+        REVIEW_FILE_URL = "/".join(
+            (
+                self.SERVER_URL_BASE,
+                "data/fpack/submitted_transcripts",
+                "review_%s.txt" % self.ANNOTATOR_NAME,
+            )
         )
-        return template_html % link
+
+        # Fetch review txt file.
+        review_names = None
+        msg = "Checking for new transcripts to review..."
+        logger.info(msg)
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(REVIEW_FILE_URL) as resp:
+                    if resp.status == 200:
+                        resp_text = await resp.text()
+                        review_names = [
+                            x.strip() for x in resp_text.split(sep="\n") if x != ""
+                        ]
+                    else:
+                        status_str = str(resp.status)
+                        body_str = await resp.text()
+                        msg = "Failed to get review file from '%s'"
+                        msg %= REVIEW_FILE_URL
+                        msg += "Server returned status code %s." % status_str
+                        msg += "Response text: %s" % body_str
+                        logger.error(msg)
+
+        except Exception as e:
+            msg = "Failed to get review file from '%s'" % REVIEW_FILE_URL
+            logger.error(msg)
+            log_exception(logger, e)
+
+        # If we failed to get the sections, exit.
+        if review_names is None:
+            return
+
+        # Fetch any new files.
+        new_file_found = False
+        for review_name in review_names:
+            if not self.state.has_downloaded_review(review_name):
+
+                # Flag for logging.
+                new_file_found = True
+
+                # Extract subject name.
+                try:
+                    subject_name = get_subject_name(review_name)
+                except Exception as e:
+                    msg = "Failed to parse subject name from '%s'" % review_name
+                    logger.error(msg)
+                    log_exception(logger, e)
+                    continue
+
+                # Calculate section name.
+                try:
+                    substr_start = review_name.index(subject_name)
+                    section_name = review_name[substr_start:]
+                except Exception as e:
+                    msg = "Failed to calculate section name from review '%s' and subject '%s'."
+                    msg %= (review_name, subject_name)
+                    logger.error(msg)
+                    log_exception(logger, e)
+                    continue
+
+                # URLs.
+                TRANSCRIPT_URL = "/".join(
+                    (
+                        self.SERVER_URL_BASE,
+                        "data/fpack/submitted_transcripts",
+                        self.subject_mapping[subject_name],
+                        subject_name,
+                        review_name + ".txt",
+                    )
+                )
+                WAV_URL = self._wav_url(section_name)
+
+                # Save paths.
+                TRANSCRIPT_PATH = os.path.join(
+                    self.dir_05_review_me,
+                    "review_" + review_name + ".txt",
+                )
+                WAV_LINK_PATH = os.path.join(
+                    self.dir_05_review_me,
+                    "review_" + review_name + "_WAV.html",
+                )
+
+                # Fetch transcript file.
+                msg = "> Downloading review transcript: '%s'..." % review_name
+                logger.info(msg)
+                try:
+                    async with aiohttp.ClientSession() as session:
+                        async with session.get(TRANSCRIPT_URL) as resp:
+                            if resp.status == 200:
+                                f = await aiofiles.open(TRANSCRIPT_PATH, mode="wb")
+                                await f.write(await resp.read())
+                                await f.close()
+                                f = await aiofiles.open(WAV_LINK_PATH, mode="w")
+                                await f.write(self._shortcut_html_body(WAV_URL))
+                                await f.close()
+                                self.state.finished_downloading_review(review_name)
+                            else:
+                                status_str = str(resp.status)
+                                body_str = await resp.text()
+                                msg = (
+                                    "Failed to download txt file from '%s'"
+                                    % TRANSCRIPT_URL
+                                )
+                                msg += "Server returned status code %s." % status_str
+                                msg += "Response text: %s" % body_str
+                                logger.error(msg)
+
+                except Exception as e:
+                    msg = "Failed to download txt file from '%s' and save to '%s', and create shortcut '%s'."
+                    msg %= (TRANSCRIPT_URL, TRANSCRIPT_PATH, WAV_LINK_PATH)
+                    logger.error(msg)
+                    log_exception(logger, e)
+                    return
+
+        if new_file_found:
+            msg = "Finished downloading review transcripts."
+        else:
+            msg = "No new review transcripts found."
+        logger.info(msg)
 
     async def _download_section(self, section_name: str):
 
@@ -663,6 +795,18 @@ class Manager:
         except:
             pass
 
+    def _shortcut_html_body(self, link: str):
+        template_html = (
+            "<html>"
+            "\n\t<body>"
+            '\n\t\t<script type="text/javascript">'
+            '\n\t\t\twindow.location.href = "%s";'
+            "\n\t\t</script>"
+            "\n\t</body>"
+            "\n</html>"
+        )
+        return template_html % link
+
     async def _start_requesting_data(self):
 
         # Are we waiting for failed download timeout?
@@ -689,7 +833,7 @@ class Manager:
                 msg += "\nThere are no new interview sections to request."
                 msg += "\nIf you would like to change your sections, please modify "
                 msg += "the file 'collaboration/my_sections.txt' and restart the "
-                msg += "server."
+                msg += "application."
                 logger.info(msg)
                 self.printed_no_new_sections = True
             # Reset flag, so we will try again shortly.

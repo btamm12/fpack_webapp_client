@@ -33,10 +33,10 @@ https://user-images.githubusercontent.com/32679237/150655652-c79109e7-2384-49a3-
   will split the interview into segments that are roughly 15 seconds long. This way
   each segment is manageable, and there's never a risk of losing too much progress
   (e.g. if you forget to save or your computer crashes).
-- **Transcription prediction:** instead of having you, the annotator, indicate the
+- **Transcript prediction:** instead of having you, the annotator, indicate the
   start/stop times and transcribe each word manually, we are using Automatic Speech
   Recognition (ASR) to speed up the process. An ASR model will be used to
-  automatically generate a transcription and it will be your job to fix any mistakes.
+  automatically generate a transcript and it will be your job to fix any mistakes.
 
 ## 2. Installation
 
@@ -111,8 +111,8 @@ You should coordinate with your fellow annotators about who will annotate which 
 Otherwise you might both annotate the same interviews, which would not be a great use
 of time!
 
-**You must select some interview sections before the tool will start working.** See
-the collaboration folder for more details.
+**You must set your name and select some interview sections before the tool will
+start working.** See the collaboration folder for more details.
 
 - [Collaboration Folder](collaboration/README.md)
 

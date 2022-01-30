@@ -1,15 +1,26 @@
 [\[Back\]](./README.md) \
-🔲🔲🔲🔲🔲⏹⬛️⬛️ \
-[\[<---\]](./05_request_subject_mapping.md) [\[--->\]](./07_sending_your_results.md)
+🔲🔲🔲🔲🔲🔲⏹⬛️⬛️ \
+[\[<---\]](./06_your_task_part2.md) [\[--->\]](./08_sending_your_results.md)
 
-# 6. Cooperation Between Annotators
+# 7. Cooperation Between Annotators
 
 You should coordinate with your fellow annotators about who will annotate which data.
 
-Even if you are working alone, **you must still select your sections before the tool
+Even if you are working alone, **you must still follow these steps before the tool
 will work!**
 
-## 6.1. Choosing Your Sections
+## 7.1. My Name
+
+Please copy your name from the file `collaboration/all_annotators.txt` and paste it
+in the file `collaboration/my_name.txt`.
+
+**For Example:**
+
+*my_name.txt*
+```
+bastiaan
+```
+## 7.2. My Sections
 
 The full list of available data can be found in the `collaboration/all_sections.txt`
 file. You should copy the lines that you would like to annotate and paste them in the

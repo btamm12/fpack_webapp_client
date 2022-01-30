@@ -80,4 +80,4 @@ The utility functions can be found in `src/utils/`. These include:
   TextGrid/audio segments.
 - A `CtmLine` class which represents one line in the CTM file.
 - A `textgrid_to_utterance()` function which will convert a number of TextGrid
-  segment files into a single transcription `.txt` file.
+  segment files into a single transcript `.txt` file.

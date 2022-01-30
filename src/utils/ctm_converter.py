@@ -5,6 +5,7 @@ from typing import List
 from scipy.io import wavfile
 
 from .ctm_line import CtmLine
+from logger import logger
 
 
 class CtmConverter:
@@ -98,19 +99,76 @@ class CtmConverter:
         self.data = {
             "audio_path": audio_path,
             "ctm_lines": ctm_lines,
-            "utterance": self.lines_to_utterance(ctm_lines),
+            "utterance": self._lines_to_utterance(ctm_lines),
         }
 
-    def round(self, value: float):
-        return round(value, 5)
+    def _interval_to_str(self, start: float, end: float, value: str):
+        return "(start=%0.4f,end=%0.4f,value=%s)" % (start, end, value)
 
-    def calculate_segment_end(
+    def _fix_rounding_errors(self, entries, minT, maxT):
+        new_entries = []
+        last_start = None
+        last_end = None
+        last_value = None
+        for start, end, value in entries:
+
+            # Make copies, so we can still log the original variables.
+            new_start = start
+            new_end = end
+
+            # Check valid start/end times. Print error message if error is too large.
+            eps = 1e-3
+            if new_start < minT:
+                if minT - new_start > eps:
+                    msg = "Problem with interval %s: start time is smaller than minT (%0.4f)."
+                    msg %= (self._interval_to_str(start, end, value), minT)
+                    logger.error(msg)
+                new_start = minT
+            if new_end > maxT:
+                if new_end - maxT > eps:
+                    msg = "Problem with interval %s: end time is larger than maxT (%0.4f)."
+                    msg %= (self._interval_to_str(start, end, value), maxT)
+                    logger.error(msg)
+                new_end = maxT
+
+            # Also check if this start time is not before the previous end time.
+            if last_end is not None and new_start < last_end:
+                if last_end - new_start > eps:
+                    msg = "Problem with consecutive intervals %s, %s: start time is smaller than previous end time."
+                    msg %= (
+                        self._interval_to_str(last_start, last_end, last_value),
+                        self._interval_to_str(start, end, value),
+                    )
+                    logger.error(msg)
+                new_start = last_end
+
+            # Make sure the interval is not zero-length!
+            if new_start > new_end - eps:
+                msg = "Problem with interval %s: interval duration collapses to 0 seconds."
+                msg += "Calculation used 'corrected interval' %s."
+                msg += "Removing interval..."
+                msg %= (
+                    self._interval_to_str(start, end, value),
+                    self._interval_to_str(new_start, new_end, value),
+                )
+                logger.error(msg)
+                continue
+
+            # Add the interval to the new entry list.
+            new_entries.append((new_start, new_end, value))
+
+            # Remember last interval.
+            last_start, last_end, last_value = start, end, value
+
+        return new_entries
+
+    def _calculate_segment_end(
         self,
         segment_start: float,
         audio_duration: float,
     ):
         nominal_end = segment_start + self.SEGMENT_DURATION_SEC
-        nearest_end = self.get_nearest_bound(nominal_end, "end")
+        nearest_end = self._get_nearest_bound(nominal_end, "end")
         offset = nearest_end - nominal_end
         max_offset = self.SEGMENT_DURATION_SEC * self.MIN_SEGMENT_LENGTH_FACTOR
         if offset > max_offset:
@@ -123,9 +181,9 @@ class CtmConverter:
         if rest < max_offset:
             segment_end = audio_duration
 
-        return round(segment_end, 5)
+        return segment_end
 
-    def get_nearest_bound(self, time: float, bound: str):
+    def _get_nearest_bound(self, time: float, bound: str):
         # bound must be either "start" or "end"
         if bound not in {"start", "end"}:
             raise Exception("bound must be 'start' or 'end'.")
@@ -159,7 +217,7 @@ class CtmConverter:
         elif bound == "end":
             return best_line.end
 
-    def filter_lines(
+    def _filter_lines(
         self, lines: List[CtmLine], start_time: float = None, end_time: float = None
     ):
         eps = 1e-3
@@ -178,13 +236,13 @@ class CtmConverter:
         else:
             return lines
 
-    def lines_to_utterance(
+    def _lines_to_utterance(
         self, lines: List[CtmLine], start_time: float = None, end_time: float = None
     ):
         # Works best if start_time/end_time are at a word boundary!
 
         # Filter lines based on desired start/end times.
-        lines = self.filter_lines(lines, start_time, end_time)
+        lines = self._filter_lines(lines, start_time, end_time)
 
         # Filter out silences.
         lines = filter(lambda x: x.word != "", lines)
@@ -217,11 +275,11 @@ class CtmConverter:
         # Process per segment.
         segment_idx = 0
         segment_start = 0
-        segment_end = self.calculate_segment_end(
+        segment_end = self._calculate_segment_end(
             segment_start,
             audio_duration,
         )
-        eps = 1e-2
+        eps = 1e-3
         while segment_start + eps < audio_duration:
 
             # Give other threads a chance to run.
@@ -232,18 +290,16 @@ class CtmConverter:
             # this is not possible at the start/end of the file.
             start_context = min(segment_start, context_secs)
             end_context = min(audio_duration - segment_end, context_secs)
-            start_context = self.round(start_context)
-            end_context = self.round(end_context)
 
             # Calculate lines.
-            filtered_lines = self.filter_lines(
+            filtered_lines = self._filter_lines(
                 ctm_lines,
                 start_time=segment_start,
                 end_time=segment_end,
             )
 
             # Calculate utterance.
-            segment_utterance = self.lines_to_utterance(filtered_lines)
+            segment_utterance = self._lines_to_utterance(filtered_lines)
 
             # ==================== #
             # CREATE AUDIO SEGMENT #
@@ -265,15 +321,11 @@ class CtmConverter:
             tg = textgrid.Textgrid()
 
             minT = 0
-            maxT = self.round(segment_end - segment_start + start_context + end_context)
+            maxT = segment_end - segment_start + start_context + end_context
 
             # Construct entries for each tier.
             utt_entries = [
-                (
-                    self.round(minT + start_context),
-                    self.round(maxT - end_context),
-                    segment_utterance,
-                )
+                (minT + start_context, maxT - end_context, segment_utterance)
             ]
             word_entries = [
                 x.word_entry(offset=-segment_start + start_context)
@@ -286,7 +338,7 @@ class CtmConverter:
 
             # Add an entry for each context area in the 3 tiers.
             if start_context > 0:
-                entry_times = (self.round(minT), self.round(start_context))
+                entry_times = (minT, start_context)
                 # Utt tier.
                 entry = (*entry_times, "Start context: do not annotate this part!")
                 utt_entries.insert(0, entry)
@@ -297,7 +349,7 @@ class CtmConverter:
                 entry = (*entry_times, "/")
                 score_entries.insert(0, entry)
             if end_context > 0:
-                entry_times = (self.round(maxT - end_context), self.round(maxT))
+                entry_times = (maxT - end_context, maxT)
                 # Utt tier.
                 entry = (*entry_times, "End context: do not annotate this part!")
                 utt_entries.append(entry)
@@ -307,6 +359,11 @@ class CtmConverter:
                 # Score tier.
                 entry = (*entry_times, "/")
                 score_entries.append(entry)
+
+            # Fix any rounding errors.
+            utt_entries = self._fix_rounding_errors(utt_entries, minT, maxT)
+            word_entries = self._fix_rounding_errors(word_entries, minT, maxT)
+            score_entries = self._fix_rounding_errors(score_entries, minT, maxT)
 
             # Create the Tiers.
             utt_tier = textgrid.IntervalTier(
@@ -347,7 +404,7 @@ class CtmConverter:
             # Next segment.
             segment_idx += 1
             segment_start = segment_end
-            segment_end = self.calculate_segment_end(
+            segment_end = self._calculate_segment_end(
                 segment_start,
                 audio_duration,
             )

@@ -75,7 +75,9 @@ bash install_linux.sh
 Use the command above to install the **required components**.
 - Linux packages (see [packages.txt](linux_packages/packages.txt))
 - Creating `create_venv.sh` symlink in root directory
+- Creating `my_name.txt` in collaboration directory
 - Creating `my_sections.txt` in collaboration directory
+- Creating the virtual environment in the root directory
 
 The script will also ask if you want to install the **development components**.
 - *Enter "n" to not install these components.*

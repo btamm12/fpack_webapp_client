@@ -146,6 +146,7 @@ page](https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?vi
 
 Run the following command in Git Bash to
 - create the symlink "create_venv.sh" in the root directory
+- create the file "my_name.txt" in the collaboration directory
 - create the file "my_sections.txt" in the collaboration directory
 - create the virtual environment "venv" in the root directory
 
