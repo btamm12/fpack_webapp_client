@@ -6,7 +6,7 @@ In this folder you will find four files:
 3. `my_name.txt`
 4. `my_sections.txt`
 
-If the files `my_name.txt` and `my_sections.txt` has not appeared, you probably have
+If the files `my_name.txt` and `my_sections.txt` have not appeared, you probably have
 not run the installer completely. See [the installation guide](../install/README.md)
 for more details.
 
