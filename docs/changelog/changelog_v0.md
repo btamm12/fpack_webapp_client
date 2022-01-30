@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## `0.2.0`
 
-**Title:** v0.2.0 \
+**Title:** Transcript Review in v0.2.0 \
 **Release Date:** 2022-01-30
 
 ### Added
