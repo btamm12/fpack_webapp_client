@@ -75,3 +75,16 @@ include all of the rules. The selected rules are listed in the [protocol
 README](protocol/README.md).
 
 **Please read this in detail before starting the annotations!**
+
+
+## 5.3. Annotation Example
+
+It may be useful to see the tool in action, so I have created a video in which a part
+of the interview section is annotated.
+
+If you click the image below, it will take you to that video. The duration is 9
+minutes.
+
+**EXAMPLE VIDEO:**
+
+[![Annotation Example](https://img.youtube.com/vi/9HJH_Uqo1FA/0.jpg)](https://youtu.be/9HJH_Uqo1FA)

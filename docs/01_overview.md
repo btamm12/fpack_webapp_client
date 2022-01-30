@@ -22,9 +22,9 @@ This documentation outlines everything the annotator must know in order to contr
 to this project. There are 9 sections:
 1. Overview (1 min)
 2. File Types (2 mins)
-3. Working With Praat (20 mins = video tutorial)
+3. Working With Praat (1 min README + 20 mins tutorial playlist)
 4. Request Subject Mapping (3 mins)
-5. Your Task (Part 1) (4 mins + 8 mins = protocol)
+5. Your Task (Part 1) (4 mins README + 8 mins protocol + 9 mins example video)
 6. Your Task (Part 2) (3 mins)
 7. Cooperation Between Annotators (3 mins)
 8. Sending Your Results (2 mins)
