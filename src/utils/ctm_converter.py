@@ -99,7 +99,7 @@ class CtmConverter:
         self.data = {
             "audio_path": audio_path,
             "ctm_lines": ctm_lines,
-            "utterance": self.lines_to_utterance(ctm_lines),
+            "utterance": self._lines_to_utterance(ctm_lines),
         }
 
     def _interval_to_str(self, start: float, end: float, value: str):
@@ -162,13 +162,13 @@ class CtmConverter:
 
         return new_entries
 
-    def calculate_segment_end(
+    def _calculate_segment_end(
         self,
         segment_start: float,
         audio_duration: float,
     ):
         nominal_end = segment_start + self.SEGMENT_DURATION_SEC
-        nearest_end = self.get_nearest_bound(nominal_end, "end")
+        nearest_end = self._get_nearest_bound(nominal_end, "end")
         offset = nearest_end - nominal_end
         max_offset = self.SEGMENT_DURATION_SEC * self.MIN_SEGMENT_LENGTH_FACTOR
         if offset > max_offset:
@@ -183,7 +183,7 @@ class CtmConverter:
 
         return segment_end
 
-    def get_nearest_bound(self, time: float, bound: str):
+    def _get_nearest_bound(self, time: float, bound: str):
         # bound must be either "start" or "end"
         if bound not in {"start", "end"}:
             raise Exception("bound must be 'start' or 'end'.")
@@ -217,7 +217,7 @@ class CtmConverter:
         elif bound == "end":
             return best_line.end
 
-    def filter_lines(
+    def _filter_lines(
         self, lines: List[CtmLine], start_time: float = None, end_time: float = None
     ):
         eps = 1e-3
@@ -236,13 +236,13 @@ class CtmConverter:
         else:
             return lines
 
-    def lines_to_utterance(
+    def _lines_to_utterance(
         self, lines: List[CtmLine], start_time: float = None, end_time: float = None
     ):
         # Works best if start_time/end_time are at a word boundary!
 
         # Filter lines based on desired start/end times.
-        lines = self.filter_lines(lines, start_time, end_time)
+        lines = self._filter_lines(lines, start_time, end_time)
 
         # Filter out silences.
         lines = filter(lambda x: x.word != "", lines)
@@ -275,7 +275,7 @@ class CtmConverter:
         # Process per segment.
         segment_idx = 0
         segment_start = 0
-        segment_end = self.calculate_segment_end(
+        segment_end = self._calculate_segment_end(
             segment_start,
             audio_duration,
         )
@@ -292,14 +292,14 @@ class CtmConverter:
             end_context = min(audio_duration - segment_end, context_secs)
 
             # Calculate lines.
-            filtered_lines = self.filter_lines(
+            filtered_lines = self._filter_lines(
                 ctm_lines,
                 start_time=segment_start,
                 end_time=segment_end,
             )
 
             # Calculate utterance.
-            segment_utterance = self.lines_to_utterance(filtered_lines)
+            segment_utterance = self._lines_to_utterance(filtered_lines)
 
             # ==================== #
             # CREATE AUDIO SEGMENT #
@@ -404,7 +404,7 @@ class CtmConverter:
             # Next segment.
             segment_idx += 1
             segment_start = segment_end
-            segment_end = self.calculate_segment_end(
+            segment_end = self._calculate_segment_end(
                 segment_start,
                 audio_duration,
             )
