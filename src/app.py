@@ -18,6 +18,14 @@ if not os.path.exists(subject_mapping_path):
     print(msg)
     exit(0)
 
+# The application cannot run without the "my_name.txt" file.
+my_name_path = os.path.join(ROOT_DIR, "collaboration", "my_name.txt")
+if not os.path.exists(my_name_path):
+    msg = "The application cannot run without the 'collaboration/my_name.txt' file."
+    msg += "\nPlease read the 'collaboration/README.md' file to learn how to create it."
+    print(msg)
+    exit(0)
+
 # The application cannot run without the "my_sections.txt" file.
 my_sections_path = os.path.join(ROOT_DIR, "collaboration", "my_sections.txt")
 if not os.path.exists(my_sections_path):
@@ -36,6 +44,18 @@ with open(version_path, "r") as f:
     version_str = f.readline().strip()
 version_tuple = tuple(version_str.split("."))
 
+# Load annotator name.
+with open(my_name_path, "r") as f:
+    annotator_name = f.readline().strip()
+valid_names = ["bastiaan", "jade", "marthe"]
+if annotator_name not in valid_names:
+    msg = "The name provided in collaboration/my_name.txt '%s' is not valid."
+    msg %= annotator_name
+    msg += "\nValid names are: %s" % ", ".join(valid_names)
+    msg += "\nPlease make sure that the file collaboration/my_name.txt is correct "
+    msg += "and does not begin with a blank line."
+    print(msg)
+    exit(1)
 
 # Create Sanic app.
 app = Sanic(__name__)
@@ -46,6 +66,7 @@ TICK_INTERVAL = 3
 # Create manager.
 mng = Manager(
     VERSION_TUPLE=version_tuple,
+    ANNOTATOR_NAME=annotator_name,
     CONTEXT_SECS=4,
     TICK_INTERVAL=TICK_INTERVAL,
     DATA_DIR=os.path.join(ROOT_DIR, "data"),

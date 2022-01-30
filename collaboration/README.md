@@ -1,14 +1,27 @@
 # Collaboration
 
-In this folder you will find two files:
-1. all_sections.txt
-2. my_sections.txt
+In this folder you will find four files:
+1. `all_annotators.txt`
+2. `all_sections.txt`
+3. `my_name.txt`
+4. `my_sections.txt`
 
-If the file `my_sections.txt` has not appeared, you probably have not run the
-installer completely. See [the installation guide](../install/README.md) for more
-details.
+If the files `my_name.txt` and `my_sections.txt` has not appeared, you probably have
+not run the installer completely. See [the installation guide](../install/README.md)
+for more details.
 
-## Choosing Your Sections
+## 1. My Name
+
+Please copy your name from the file `all_annotators.txt` and paste it in the file
+`my_name.txt`.
+
+**For Example:**
+
+*my_name.txt*
+```
+bastiaan
+```
+## 2. My Sections
 
 You should coordinate with your fellow annotators about who will annotate which data.
 The full list of available data can be found in the `all_sections.txt` file. You

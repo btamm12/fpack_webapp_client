@@ -1,8 +1,8 @@
 [\[Back\]](./README.md) \
-🔲🔲🔲🔲⏹⬛️⬛️⬛️ \
-[\[<---\]](./04_your_task_as_annotator.md) [\[--->\]](./06_cooperation_between_annotators.md)
+🔲🔲🔲⏹⬛️⬛️⬛️⬛️⬛️ \
+[\[<---\]](./03_working_with_praat.md) [\[--->\]](./05_your_task_part1.md)
 
-# 5. Request Subject Mapping
+# 4. Request Subject Mapping
 
 Before this application can do anything, it needs a certain file, called the "subject
 mapping". This file provides an extra layer of security to protect the data of the

@@ -1,5 +1,5 @@
 [\[Back\]](./README.md) \
-⏹⬛️⬛️⬛️⬛️⬛️⬛️⬛️ \
+⏹⬛️⬛️⬛️⬛️⬛️⬛️⬛️⬛️ \
 \[<---\] [\[--->\]](./02_file_types.md)
 
 # 1. Overview
@@ -19,15 +19,16 @@ be accurately transcribed in order to perform further Natural Language Processin
 ## 1.2. Documentation Contents
 
 This documentation outlines everything the annotator must know in order to contribute
-to this project. There are 7 sections:
+to this project. There are 9 sections:
 1. Overview (1 min)
 2. File Types (2 mins)
 3. Working With Praat (20 mins = video tutorial)
-4. Your Task As Annotator (4 mins + 8 mins = protocol)
-5. Request Subject Mapping (3 mins)
-6. Cooperation Between Annotators (3 mins)
-7. Sending Your Results (2 mins)
-8. Future Work (Developers) (5 mins)
+4. Request Subject Mapping (3 mins)
+5. Your Task (Part 1) (4 mins + 8 mins = protocol)
+6. Your Task (Part 2) (3 mins)
+7. Cooperation Between Annotators (3 mins)
+8. Sending Your Results (2 mins)
+9. Future Work (Developers) (5 mins)
 
 After reading the documentation, you should also have a look at the README file in
 the `data/` folder, which contains more specific details.

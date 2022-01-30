@@ -20,11 +20,15 @@ echo "Installing other core components..."
 echo "> Creating 'create_venv.sh' symlink in root directory."
 source ../common/create_venv/create_venv_symlink.sh
 
-# * 1.2. Create "my_sections.txt".
+# * 1.2. Create "my_name.txt".
+echo "> Creating 'my_name.txt' file in collaboration directory."
+source ../common/my_name/create_my_name.sh
+
+# * 1.3. Create "my_sections.txt".
 echo "> Creating 'my_sections.txt' file in collaboration directory."
 source ../common/my_sections/create_my_sections.sh
 
-# * 1.3. Create venv.
+# * 1.4. Create venv.
 echo "> Creating venv..."
 source ../../create_venv.sh
 
