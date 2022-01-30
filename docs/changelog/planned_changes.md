@@ -7,12 +7,9 @@
 
 ### Added
 - **Finished:**
-  - ...
+  - add review feature and updated documentation
 - **Work In Progress:**
-  - add finished_sections.txt on server which lets the annotators know which sections
-    have been completed by whom
-  - add `finished_transcripts/` directory in `data/` which will be automatically
-    populated by transcripts and audio hyperlinks from `finished_sections.txt`
+  - ...
 - **To-Do:**
   - ...
 
