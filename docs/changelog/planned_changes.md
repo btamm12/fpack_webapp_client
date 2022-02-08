@@ -1,5 +1,6 @@
 # Planned Changes
 
+
 ## `v1.0.0`
 
 **Title:** - \
@@ -60,7 +61,7 @@
 - **Work In Progress:**
   - ...
 - **To-Do:**
-  - fix how special charaters, e.g. "è" are loading from CTM file
+  - ...
 
 ### Security
 - **Finished:**
