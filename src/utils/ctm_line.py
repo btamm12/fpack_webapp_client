@@ -51,6 +51,7 @@ class CtmLine:
             elif duration is not None:
                 self.duration = duration
                 self.end = self.start + self.duration
+            self.is_filler = False
             self.word = self._remove_filler(word)
             self.score = score
 
@@ -58,11 +59,16 @@ class CtmLine:
         self.end = self.start + self.duration
 
     def _remove_filler(self, word: str):
-        try:
-            idx = word.index(",filler")
+        idx = word.find(",filler")
+        if idx >= 0:
+            self.is_filler = True
             return word[:idx]
-        except:
-            return word
+        idx = word.find(",ggg")
+        if idx >= 0:
+            self.is_filler = True
+            return word[:idx]
+        self.is_filler = False
+        return word
 
     def word_entry(self, offset: float = None):
         if offset is None:

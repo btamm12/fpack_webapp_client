@@ -96,6 +96,59 @@ class CtmConverter:
 
             i += 1
 
+        # Heuristic punctuation based on silences.
+        silences = []
+        for line in ctm_lines:
+            if line.word == "":
+                silences.append(line.end - line.start)
+
+        # Punctuation threshold = longest xx% of silences
+        PUNC_THRESHOLD = 0.40
+        silences_sort = sorted(silences)
+        idx = int(PUNC_THRESHOLD * len(silences_sort))
+        PUNC_SILENCE_DURATION = silences_sort[idx]
+
+        # Likely sentence starts for punctuation.
+        likely_starts = [
+            *("ik", "jij", "je", "hij", "zij", "ze", "u", "jullie"),
+            *("de", "het", "dit", "dat"),
+            *("en", "maar", "dus", "dan", "toen"),
+        ]
+
+        # Insert punctuation.
+        last_punctuation = -1
+        i = 0
+        while i < len(ctm_lines):
+
+            # Don't allow short sentences (minimum 3 words)
+            # ".  A  B  ."
+            #  0* 1  2  3*
+            if i - last_punctuation <= 3:
+                i += 1
+                continue
+
+            line = ctm_lines[i]
+            line_duration = line.end - line.start
+            if line.word == "" and line_duration > PUNC_SILENCE_DURATION:
+
+                # Search for likely sentence starts.
+                j = i + 1
+                while j < len(ctm_lines):
+                    line_j = ctm_lines[j]
+                    if not line_j.is_filler and line_j.word != "":
+                        if line_j.word in likely_starts:
+                            line.word = "."
+                            i = j
+                            last_punctuation = j
+                        break
+                    j += 1
+
+                # Final word ends with period.
+                if i == len(ctm_lines) - 1:
+                    line.word = "."
+
+            i += 1
+
         self.data = {
             "audio_path": audio_path,
             "ctm_lines": ctm_lines,

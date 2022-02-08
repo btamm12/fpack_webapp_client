@@ -1,5 +1,61 @@
 # Planned Changes
 
+## `v0.2.1`
+
+**Title:** Punctuation Generation \
+**Release Date:** N/A
+
+
+### Added
+- **Finished:**
+  - Added punctuation generation (only ".") using heuristic method
+- **Work In Progress:**
+  - ...
+- **To-Do:**
+  - ...
+
+### Changed
+- **Finished:**
+  - bump version to v0.2.1
+- **Work In Progress:**
+  - ...
+- **To-Do:**
+  - ...
+
+### Deprecated
+- **Finished:**
+  - ...
+- **Work In Progress:**
+  - ...
+- **To-Do:**
+  -  ...
+
+### Removed
+- **Finished:**
+  - ...
+- **Work In Progress:**
+  - ...
+- **To-Do:**
+  -  ...
+
+### Fixed
+- **Finished:**
+  - ...
+- **Work In Progress:**
+  - ...
+- **To-Do:**
+  - ...
+
+### Security
+- **Finished:**
+  - ...
+- **Work In Progress:**
+  - ...
+- **To-Do:**
+  -  ...
+
+
+
 ## `v1.0.0`
 
 **Title:** - \
@@ -60,7 +116,7 @@
 - **Work In Progress:**
   - ...
 - **To-Do:**
-  - fix how special charaters, e.g. "è" are loading from CTM file
+  - ...
 
 ### Security
 - **Finished:**
