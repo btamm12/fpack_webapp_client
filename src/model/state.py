@@ -6,6 +6,7 @@ from typing import Dict, List, Union
 class State:
 
     _state: Dict = None
+    _startup_needs_extraction: bool = False
 
     @property
     def _downloaded_reviews(self) -> List[str]:
@@ -45,6 +46,12 @@ class State:
             }
             self.state_changed()
 
+        # Extraction needed at startup?
+        downloaded_set = set(self._downloaded_sections)
+        extracted_set = set(self._extracted_sections)
+        diff_set = downloaded_set.difference(extracted_set)
+        self._startup_needs_extraction = len(diff_set) > 0
+
     def finished_downloading_review(self, review_name: str):
         self._downloaded_reviews.append(review_name)
         self.state_changed()
@@ -54,6 +61,7 @@ class State:
         self.state_changed()
 
     def finished_extracting_section(self, section_name: str):
+        self._startup_needs_extraction = False
         self._extracted_sections.append(section_name)
         self.state_changed()
 

@@ -201,7 +201,10 @@ class Manager:
 
         # We will try to keep 2 sections in the queue. If we see that there is only
         # 1 section (or no sections) left, then we will request new data.
-        if len(sections_01) < 2 and not self.is_requesting_data:
+        should_start_requesting = (
+            len(sections_01) < 2 or self.state._startup_needs_extraction
+        )
+        if should_start_requesting and not self.is_requesting_data:
             self.is_requesting_data = True
             loop.create_task(self._start_requesting_data())
 

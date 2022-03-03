@@ -222,7 +222,7 @@ class CtmConverter:
     ):
         nominal_end = segment_start + self.SEGMENT_DURATION_SEC
         nearest_end = self._get_nearest_bound(nominal_end, "end")
-        offset = nearest_end - nominal_end
+        offset = abs(nearest_end - nominal_end)
         max_offset = self.SEGMENT_DURATION_SEC * self.MIN_SEGMENT_LENGTH_FACTOR
         if offset > max_offset:
             segment_end = nominal_end
