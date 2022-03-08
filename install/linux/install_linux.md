@@ -1,4 +1,4 @@
-# Installation – Annotator (Linux)
+# Installation (Linux)
 
 ## 1. Install Praat
 

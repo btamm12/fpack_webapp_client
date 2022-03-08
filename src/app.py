@@ -127,3 +127,90 @@ if __name__ == "__main__":
     # local_machine_ip==192.168.0.200)
     # Source: https://stackoverflow.com/a/38175246
     app.run(host="0.0.0.0", port=8080, debug=__DEBUG__)
+
+
+SRC_DIR = os.path.dirname(__file__)
+ROOT_DIR = os.path.realpath(os.path.join(SRC_DIR, ".."))
+
+
+# Create Sanic app.
+app = Sanic(__name__)
+
+# TODO: move to config, sync with GlobalSupervisor class
+STATE_PATH = Path(SRC_DIR, "state.pkl")
+TICK_INTERVAL = 1  # Tick interval, measured in seconds.
+
+# Create global instances.
+global_supervisor = GlobalSupervisor(STATE_PATH, TICK_INTERVAL)
+
+# Initialize API.
+app.blueprint(create_api(global_supervisor))
+
+
+# Register logging middleware.
+@app.middleware("request")
+async def extract_user(request: Request):
+    msg = "Received request at endpoint '%s'." % request.endpoint
+    logger.info(msg)
+
+
+# Test endpoint.
+@app.get("/test")
+async def test(request: Request):
+    return text("test\n")
+
+
+# Status endpoint.
+@app.get("/health")
+async def test(request: Request):
+    return json({"status": "ok"})
+
+
+# Periodic task.
+async def tick():
+    global global_supervisor
+
+    # Initialze the global supervisor's async attributes (e.g. events) during the
+    # first tick of the interval task.
+    if not global_supervisor.async_initialized:
+        await global_supervisor.async_interval_init()
+
+    # Update the model.
+    await global_supervisor.tick()
+
+
+# Handle IB connection/disconnection when server starts/stops.
+@app.listener("before_server_start")
+def before_start(app, loop):
+    global TICK_INTERVAL
+
+    # Start periodic task.
+    # TODO: got this error, solved it by setting timezone manually. Maybe there's a
+    # better option?
+    # - https://stackoverflow.com/questions/69776414/pytzusagewarning-the-zone-attribute-is-specific-to-pytzs-interface-please-mig
+    scheduler = AsyncIOScheduler({"event_loop": loop}, timezone="Europe/Brussels")
+    scheduler.add_job(tick, "interval", seconds=TICK_INTERVAL)
+    scheduler.start()
+
+
+if __name__ == "__main__":
+    __DEBUG__ = False
+
+    # Set up logger.
+    __LOGGING_FMT__ = "[%(levelname)s @ %(asctime)s] %(message)s"
+    __LOGGING_LVL_CONSOLE__ = logging.INFO
+    __LOGGING_LVL_FILE__ = logging.INFO
+    __LOGGING_FILE_PATH__ = default_logger_path(SRC_DIR)
+    logger_setup(
+        fmt=__LOGGING_FMT__,
+        console_level=__LOGGING_LVL_CONSOLE__,
+        file_level=__LOGGING_LVL_FILE__,
+        file_path=__LOGGING_FILE_PATH__,
+    )
+    logger.info("Setting up logger.")
+
+    # Run app.
+    # 0.0.0.0 means listen to all channels (e.g. both local_host==127.0.0.1 and
+    # local_machine_ip==192.168.0.200)
+    # Source: https://stackoverflow.com/a/38175246
+    app.run(host="0.0.0.0", port=8080, debug=__DEBUG__)
