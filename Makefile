@@ -9,9 +9,11 @@ PROJECT_NAME = fpack_webapp_client
 UNAME := $(shell uname)
 ifeq ($(UNAME), Linux)
 PYTHON_INTERPRETER = python3
+ACTIVATE_CMD = "source venv/bin/activate"
 endif
 ifeq ($(UNAME), Windows)
 PYTHON_INTERPRETER = python
+ACTIVATE_CMD = "source venv/Scripts/activate"
 endif
 
 
@@ -46,8 +48,10 @@ reset:
 
 ## Set up python interpreter environment
 create_environment:
+	$(PYTHON_INTERPRETER) -m pip install virtualenv
 	$(PYTHON_INTERPRETER) -m virtualenv venv
 	@echo ">>> Virtual environment created under venv/."
+	@echo ">>> Activate using: $(ACTIVATE_CMD)"
 
 ## Test python environment is setup correctly
 test_environment:
