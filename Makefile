@@ -60,7 +60,6 @@ create_environment:
 	$(PYTHON_INTERPRETER) -m pip install virtualenv
 	$(PYTHON_INTERPRETER) -m virtualenv venv
 	@echo ">>> Virtual environment created under venv/."
-	@echo ">>> Activate using: $(ACTIVATE_CMD)"
 
 ## Test python environment is setup correctly
 test_environment:

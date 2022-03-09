@@ -21,4 +21,3 @@ fi
 $PYTHON_INTERPRETER -m pip install virtualenv
 $PYTHON_INTERPRETER -m virtualenv venv
 echo ">>> Virtual environment created under venv/."
-echo ">>> Activate using: $(ACTIVATE_CMD)"

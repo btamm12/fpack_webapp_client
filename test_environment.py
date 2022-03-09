@@ -9,7 +9,7 @@ def main():
     ROOT_DIR = Path(__file__).resolve().parent
     VENV_DIR = ROOT_DIR.joinpath("venv")
     if not VENV_DIR.exists():
-        msg = ">>> venv/ does not exist! Please run 'make create_environment' first."
+        msg = ">>> venv/ does not exist! Please run 'bash make_environment.sh' (or 'make create_environment') first."
         print(msg)
         exit(1)
 
