@@ -1,4 +1,4 @@
-.PHONY: app clear_data create_environment requirements test_environment
+.PHONY: app clean clear_data create_environment requirements test_environment
 
 #################################################################################
 # GLOBALS                                                                       #
@@ -32,8 +32,13 @@ requirements: test_environment
 app: requirements
 	$(PYTHON_INTERPRETER) src/app.py
 
+## Delete all compiled Python files
+clean:
+	find . -type f -name "*.py[co]" -delete
+	find . -type d -name "__pycache__" -delete
+
 ## Migrate from old project
-migration: requirements
+migration: clean requirements
 	$(PYTHON_INTERPRETER) src/migration.py
 
 ## Reset app
