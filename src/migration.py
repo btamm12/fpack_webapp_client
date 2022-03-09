@@ -51,6 +51,9 @@ def migration():
             )
             continue
         for item in folder.iterdir():
+            if item.suffix not in {".html", ".wav"}:
+                print(f"data/{folder.name}/{item.name} not copied.")
+                continue
             dst_path = dst_folder.joinpath(item.name)
             shutil.copy(item, dst_path)
             items_copied += 1
