@@ -43,17 +43,17 @@ def migration():
     DATA_EXTENSIONS = {".html", ".TextGrid", ".txt", ".wav"}
     for folder in OLD_REPO.joinpath("data").iterdir():
         if not folder.is_dir():
-            print(f"data/{folder.name} not copied.")
+            print(f"> data/{folder.name} not copied.")
             continue
         dst_folder = constants.DIR_DATA.joinpath(folder.name)
         if not dst_folder.exists():
             print(
-                f"data/{folder.name}/ not copied since it does not exist in the new project."
+                f"> data/{folder.name}/ not copied since it does not exist in the new project."
             )
             continue
         for item in folder.iterdir():
             if item.suffix not in DATA_EXTENSIONS:
-                print(f"data/{folder.name}/{item.name} not copied.")
+                print(f"> data/{folder.name}/{item.name} not copied.")
                 continue
             dst_path = dst_folder.joinpath(item.name)
             shutil.copy(item, dst_path)
