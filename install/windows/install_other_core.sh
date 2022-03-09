@@ -29,7 +29,7 @@ touch "my_sections.txt"
 # * 1.3. Create venv.
 echo "> Creating venv..."
 cd ../..
-python -m virtualenv venv
+make create_environment
 
 
 # Restore original working directory.

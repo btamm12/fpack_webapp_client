@@ -23,8 +23,12 @@ endif
 # COMMANDS                                                                      #
 #################################################################################
 
+## Activate the virtual environment.
+activate_venv: test_environment
+	eval echo $(ACTIVATE_CMD)
+
 ## Install Python Dependencies
-requirements: test_environment
+requirements: test_environment activate_venv
 	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel
 	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
 

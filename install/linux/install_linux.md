@@ -45,6 +45,3 @@ Use the command above to install the **required components**.
 - Creating `my_name.txt` in collaboration directory
 - Creating `my_sections.txt` in collaboration directory
 - Creating the virtual environment in the root directory
-
-The script will also ask if you want to install the **development components**.
-- *Enter "n" to not install these components.*
