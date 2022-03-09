@@ -11,6 +11,15 @@ def migrate():
         print("Cannot find project to migrate from: 'fpack_webapp_client_old'.")
         exit(1)
 
+    # Copy subject mapping.
+    print("Copying subject_mapping.txt.")
+    src_path = OLD_REPO.joinpath("subject_mapping.txt")
+    dst_path = constants.SUBJECT_MAPPING_PATH
+    if src_path.exists():
+        shutil.copy(src_path, dst_path)
+    else:
+        print("> subject_mapping.txt does not exist.")
+
     # Copy collaboration.
     print("Copying collaboration/my_name.txt.")
     src_path = OLD_REPO.joinpath("collaboration", "my_name.txt")
