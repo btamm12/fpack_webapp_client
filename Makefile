@@ -31,8 +31,8 @@ app: requirements
 	$(PYTHON_INTERPRETER) src/app.py
 
 ## Migrate from old project
-migrate: requirements
-	$(PYTHON_INTERPRETER) src/migrate.py
+migration: requirements
+	$(PYTHON_INTERPRETER) src/migration.py
 
 ## Reset app
 #	find . -type f -name "*.py[co]" -delete

@@ -3,7 +3,7 @@ import shutil
 from src import constants
 
 
-def migrate():
+def migration():
 
     # Path to old repository.
     OLD_REPO = constants.DIR_PROJECT.parent.joinpath("fpack_webapp_client_old")
@@ -69,4 +69,4 @@ def migrate():
 
 
 if __name__ == "__main__":
-    migrate()
+    migration()
