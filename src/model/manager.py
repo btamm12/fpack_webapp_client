@@ -6,9 +6,9 @@ import glob
 import os
 from typing import Tuple
 
-from .state import State
-from logger import log_exception, logger
-from utils import CtmConverter, get_subject_name, textgrid_to_utterance
+from src.model.state import State
+from src.logger import log_exception, logger
+from src.utils import CtmConverter, get_subject_name, textgrid_to_utterance
 
 
 class Manager:

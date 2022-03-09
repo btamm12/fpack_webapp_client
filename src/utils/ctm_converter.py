@@ -4,8 +4,8 @@ from praatio import audio, textgrid
 from typing import List
 from scipy.io import wavfile
 
-from .ctm_line import CtmLine
-from logger import logger
+from src.utils.ctm_line import CtmLine
+from src.logger import logger
 
 
 class CtmConverter:
