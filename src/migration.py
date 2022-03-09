@@ -40,6 +40,7 @@ def migration():
     # Copy data.
     print("Copying data...")
     items_copied = 0
+    DATA_EXTENSIONS = {".html", ".TextGrid", ".txt", ".wav"}
     for folder in OLD_REPO.joinpath("data").iterdir():
         if not folder.is_dir():
             print(f"data/{folder.name} not copied.")
@@ -51,7 +52,7 @@ def migration():
             )
             continue
         for item in folder.iterdir():
-            if item.suffix not in {".html", ".wav"}:
+            if item.suffix not in DATA_EXTENSIONS:
                 print(f"data/{folder.name}/{item.name} not copied.")
                 continue
             dst_path = dst_folder.joinpath(item.name)
