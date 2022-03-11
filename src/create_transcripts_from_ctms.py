@@ -1,7 +1,7 @@
-from utils import CtmLine
-
 import os
 from typing import List
+
+from src.utils import CtmLine
 
 
 class _CtmConverter:

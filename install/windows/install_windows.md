@@ -1,4 +1,4 @@
-# Installation – Annotator (Windows)
+# Installation (Windows)
 
 ## 1. Install Praat
 
@@ -8,7 +8,10 @@ can download the `.zip` file from the
 
 ## 2. Install Git
 
-1. Download Git from the [website](https://git-scm.com/download/win) and run the
+Download Git from the [website](https://git-scm.com/download/win) and run the
+executable.
+
+<!-- 1. Download Git from the [website](https://git-scm.com/download/win) and run the
    executable.
 2. Make sure you enable symbolic links when you install Git for Windows.
    <div style="text-align:left">
@@ -22,18 +25,24 @@ can download the `.zip` file from the
    - Under the "System variables" pane, click the "New..." button.
    - In the "Variable name:" field, enter `MSYS` .
    - In the "Variable value:" field, enter `winsymlinks:nativestrict` .
-   - Click "OK" on all the windows.
+   - Click "OK" on all the windows. -->
 
 ## 3. Clone Repository
 
 Use the following commands to clone the repository.
 
-**Note: the argument `-c core.symlinks=true` is crucial for pushing/pulling symlinks!**
+```
+git clone https://github.com/btamm12/fpack_webapp_client.git
+```
+
+<!-- **Note: the argument `-c core.symlinks=true` is crucial for pushing/pulling symlinks!**
 
 ```
 git clone -c core.symlinks=true https://github.com/btamm12/fpack_webapp_client.git
 git config --global core.autocrlf true
-```
+``` -->
+
+
 
 ## 4. Installation: Core Components
 
@@ -80,7 +89,7 @@ executables from being scanned. Otherwise, Avast will waste a lot of time.
    *\venv\Scripts\*
    ```
 
-### 4.2. Windows Packages
+<!-- ### 4.2. Windows Packages
 
 **4.2.1. Microsoft C++ Runtime 14.0**
 
@@ -89,12 +98,11 @@ For some Python packages Microsoft C++ Runtime 14.0 is required.
 - You can install this
 by running [this executable](https://aka.ms/vs/17/release/vc_redist.x64.exe), which
 can be found on the [Microsoft download
-page](https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170).
+page](https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170). -->
 
-### 4.3. Install Other Core Components
+### 4.2. Install Other Core Components
 
 Run the following command in Git Bash to
-- create the symlink "create_venv.sh" in the root directory
 - create the file "my_name.txt" in the collaboration directory
 - create the file "my_sections.txt" in the collaboration directory
 - create the virtual environment "venv" in the root directory

@@ -1,51 +1,45 @@
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import logging
-import os
 from sanic import Sanic
 from sanic.response import text
 from sanic.request import Request
 
-from logger import default_logger_path, logger, logger_setup
-from model import Manager
+from src import constants
+from src.logger import default_logger_path, logger, logger_setup
+from src.model import Manager
 
 # The application cannot run without the "subject_mapping.txt" file.
-SRC_DIR = os.path.dirname(__file__)
-ROOT_DIR = os.path.realpath(os.path.join(SRC_DIR, ".."))
-subject_mapping_path = os.path.join(ROOT_DIR, "subject_mapping.txt")
-if not os.path.exists(subject_mapping_path):
+if not constants.SUBJECT_MAPPING_PATH.exists():
     msg = "The application cannot run without the 'subject_mapping.txt' file."
     msg += "\nPlease read the main README.md file to learn how to request it."
     print(msg)
     exit(0)
 
 # The application cannot run without the "my_name.txt" file.
-my_name_path = os.path.join(ROOT_DIR, "collaboration", "my_name.txt")
-if not os.path.exists(my_name_path):
+if not constants.MY_NAME_PATH.exists():
     msg = "The application cannot run without the 'collaboration/my_name.txt' file."
     msg += "\nPlease read the 'collaboration/README.md' file to learn how to create it."
     print(msg)
     exit(0)
 
 # The application cannot run without the "my_sections.txt" file.
-my_sections_path = os.path.join(ROOT_DIR, "collaboration", "my_sections.txt")
-if not os.path.exists(my_sections_path):
+if not constants.MY_SECTIONS_PATH.exists():
     msg = "The application cannot run without the 'collaboration/my_sections.txt' file."
     msg += "\nPlease read the 'collaboration/README.md' file to learn how to create it."
     print(msg)
     exit(0)
 
 # Load version file.
-version_path = os.path.join(ROOT_DIR, "version.txt")
-if not os.path.exists(version_path):
+if not constants.VERSION_PATH.exists():
     msg = "The version.txt file could not be found! Exiting program..."
     print(msg)
     exit(1)
-with open(version_path, "r") as f:
+with open(constants.VERSION_PATH, "r") as f:
     version_str = f.readline().strip()
 version_tuple = tuple(version_str.split("."))
 
 # Load annotator name.
-with open(my_name_path, "r") as f:
+with open(constants.MY_NAME_PATH, "r") as f:
     annotator_name = f.readline().strip()
 valid_names = ["bastiaan", "jade", "marthe"]
 if annotator_name not in valid_names:
@@ -69,11 +63,11 @@ mng = Manager(
     ANNOTATOR_NAME=annotator_name,
     CONTEXT_SECS=4,
     TICK_INTERVAL=TICK_INTERVAL,
-    DATA_DIR=os.path.join(ROOT_DIR, "data"),
-    SUBJECT_MAPPING_PATH=subject_mapping_path,
-    MY_SECTIONS_PATH=my_sections_path,
-    STATE_PATH=os.path.join(ROOT_DIR, "src", "state.pkl"),
-    SERVER_URL_BASE="https://homes.esat.kuleuven.be/~btamm/fpack_webapp/v0/",
+    DATA_DIR=str(constants.DIR_DATA),
+    SUBJECT_MAPPING_PATH=constants.SUBJECT_MAPPING_PATH,
+    MY_SECTIONS_PATH=constants.MY_SECTIONS_PATH,
+    STATE_PATH=str(constants.STATE_PATH),
+    SERVER_URL_BASE="https://homes.esat.kuleuven.be/~btamm/fpack_webapp/v1/",
     DOWNLOAD_FAIL_TIMEOUT_SECS=60,
 )
 
@@ -113,7 +107,7 @@ if __name__ == "__main__":
     __LOGGING_FMT__ = "[%(levelname)s @ %(asctime)s] %(message)s"
     __LOGGING_LVL_CONSOLE__ = logging.INFO
     __LOGGING_LVL_FILE__ = logging.INFO
-    __LOGGING_FILE_PATH__ = default_logger_path(SRC_DIR)
+    __LOGGING_FILE_PATH__ = default_logger_path(constants.DIR_SRC)
     logger_setup(
         fmt=__LOGGING_FMT__,
         console_level=__LOGGING_LVL_CONSOLE__,
@@ -121,6 +115,7 @@ if __name__ == "__main__":
         file_path=__LOGGING_FILE_PATH__,
     )
     logger.info("Setting up logger.")
+    logger.info(f"Running fpack_webapp_client v{version_str}.")
 
     # Run app.
     # 0.0.0.0 means listen to all channels (e.g. both local_host==127.0.0.1 and

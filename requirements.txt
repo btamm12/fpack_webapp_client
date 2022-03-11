@@ -1,13 +1,12 @@
-# Code formatter (if this venv is the active Python interpreter)
+# local package
+-e .
+
+# formatter
 black
 
-# Send HTTP requests.
-aiohttp # Best asynchronous library
-
-# Async file creation.
+# project requirements
+aiohttp
 aiofiles
-
-# App framework.
 sanic
 multidict>=5.0.0,<6.0.0a0 # otherwise dependency error (sanic) when creating venv
 

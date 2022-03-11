@@ -6,9 +6,9 @@ import glob
 import os
 from typing import Tuple
 
-from .state import State
-from logger import log_exception, logger
-from utils import CtmConverter, get_subject_name, textgrid_to_utterance
+from src.model.state import State
+from src.logger import log_exception, logger
+from src.utils import CtmConverter, get_subject_name, textgrid_to_utterance
 
 
 class Manager:
@@ -261,7 +261,7 @@ class Manager:
         EXAMPLE_SECTIONS_URL = "/".join(
             (
                 self.SERVER_URL_BASE,
-                "data/fpack/example_transcripts",
+                "data/example_transcripts",
                 "example_sections.txt",
             )
         )
@@ -315,7 +315,7 @@ class Manager:
                 TRANSCRIPT_URL = "/".join(
                     (
                         self.SERVER_URL_BASE,
-                        "data/fpack/example_transcripts",
+                        "data/example_transcripts",
                         self.subject_mapping[subject_name],
                         subject_name,
                         section_name + ".txt",
@@ -376,7 +376,7 @@ class Manager:
         REVIEW_FILE_URL = "/".join(
             (
                 self.SERVER_URL_BASE,
-                "data/fpack/submitted_transcripts",
+                "data/submitted_transcripts",
                 "review_%s.txt" % self.ANNOTATOR_NAME,
             )
         )
@@ -443,7 +443,7 @@ class Manager:
                 TRANSCRIPT_URL = "/".join(
                     (
                         self.SERVER_URL_BASE,
-                        "data/fpack/submitted_transcripts",
+                        "data/submitted_transcripts",
                         self.subject_mapping[subject_name],
                         subject_name,
                         review_name + ".txt",
@@ -508,7 +508,7 @@ class Manager:
         CTM_URL = "/".join(
             (
                 self.SERVER_URL_BASE,
-                "data/fpack/ctm_init",
+                "data/ctm_init",
                 self.subject_mapping[subject_name],
                 subject_name,
                 section_name + ".ctm",
@@ -895,7 +895,7 @@ class Manager:
         WAV_URL = "/".join(
             (
                 self.SERVER_URL_BASE,
-                "data/fpack/audio/int16",
+                "data/audio/int16",
                 self.subject_mapping[subject_name],
                 subject_name,
                 section_name + ".wav",
