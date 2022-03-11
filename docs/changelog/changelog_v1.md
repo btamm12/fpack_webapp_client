@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## `v1.0.0`
 
 **Title:** New installation procedure in v1 \
-**Release Date:** 2022-03-14
+**Release Date:** 2022-03-11
 
 Note that a migration is needed to upgrade to `v1`. Please refer in the [migration_v1
 document](../migration/migration_v1.md) for this.
