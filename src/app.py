@@ -67,7 +67,7 @@ mng = Manager(
     SUBJECT_MAPPING_PATH=constants.SUBJECT_MAPPING_PATH,
     MY_SECTIONS_PATH=constants.MY_SECTIONS_PATH,
     STATE_PATH=str(constants.STATE_PATH),
-    SERVER_URL_BASE="https://homes.esat.kuleuven.be/~btamm/fpack_webapp/v0/",
+    SERVER_URL_BASE="https://homes.esat.kuleuven.be/~btamm/fpack_webapp/v1/",
     DOWNLOAD_FAIL_TIMEOUT_SECS=60,
 )
 
