@@ -23,8 +23,10 @@ document](../migration/migration_v1.md) for this.
 
 ### Changed
 - Using more simple installation procedure
-  - Changed server URL from `v0` to `v1`. Note that the underlying data is the same through the `v1` API.
-  - Changed data URLs in manager since the `v1` API requires a different route to get to the data directories.
+  - Changed server URL from `v0` to `v1`. Note that the underlying data is the same
+    through the `v1` API.
+  - Changed data URLs in manager since the `v1` API requires a different route to get
+    to the data directories.
     ```python
     # Old URL.
     AUDIO_URL = "https://homes.esat.kuleuven.be/~btamm/fpack_webapp/v0/data/fpack/audio"
