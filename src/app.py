@@ -101,6 +101,7 @@ def before_start(app, loop):
 
 
 if __name__ == "__main__":
+    logger.info(f"Running fpack_webapp_client v{version_str}.")
     __DEBUG__ = False
 
     # Set up logger.
