@@ -101,7 +101,6 @@ def before_start(app, loop):
 
 
 if __name__ == "__main__":
-    logger.info(f"Running fpack_webapp_client v{version_str}.")
     __DEBUG__ = False
 
     # Set up logger.
@@ -116,6 +115,7 @@ if __name__ == "__main__":
         file_path=__LOGGING_FILE_PATH__,
     )
     logger.info("Setting up logger.")
+    logger.info(f"Running fpack_webapp_client v{version_str}.")
 
     # Run app.
     # 0.0.0.0 means listen to all channels (e.g. both local_host==127.0.0.1 and
