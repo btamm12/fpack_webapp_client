@@ -35,4 +35,4 @@ $PYTHON_INTERPRETER -m pip install -U pip setuptools wheel
 $PYTHON_INTERPRETER -m pip install -r requirements.txt
 
 # 5. migration
-$PYTHON_INTERPRETER src/app.py
+$PYTHON_INTERPRETER src/migration.py
