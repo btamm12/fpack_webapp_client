@@ -40,7 +40,7 @@ def migration():
     # Copy data.
     print("Copying data...")
     items_copied = 0
-    DATA_EXTENSIONS = {".html", ".TextGrid", ".txt", ".wav"}
+    DATA_EXTENSIONS = {".ctm", ".html", ".TextGrid", ".txt", ".wav"}
     for folder in OLD_REPO.joinpath("data").iterdir():
         if not folder.is_dir():
             print(f"> data/{folder.name} not copied.")
