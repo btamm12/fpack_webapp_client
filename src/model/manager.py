@@ -225,6 +225,7 @@ class Manager:
                 async with session.get(VERSION_URL) as resp:
                     if resp.status == 200:
                         latest_version_str = await resp.text()
+                        latest_version_str = latest_version_str.strip()
                         latest_version_tuple = tuple(latest_version_str.split("."))
                         if latest_version_tuple > self.VERSION_TUPLE:
                             msg = "A new version v%s is available!"
