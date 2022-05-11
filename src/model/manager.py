@@ -686,7 +686,20 @@ class Manager:
                 msg = "Saving transcript to '%s'" % TRANSCRIPT_PATH
                 logger.info(msg)
                 if os.path.exists(TRANSCRIPT_PATH):
-                    msg = "Transcript already exists! Overwriting..."
+                    msg = "Transcript already exists! Searching for unique name..."
+                    logger.warning(msg)
+                    idx = 1
+                    while os.path.exists(TRANSCRIPT_PATH):
+                        TRANSCRIPT_PATH = os.path.join(
+                            self.dir_03_generated_transcripts,
+                            "%s_%03i.txt" % (section_name, idx),
+                        )
+                        idx += 1
+                        if idx >= 1000:
+                            raise Exception(
+                                f"Ran out of numbers! Cannot find unique name for {section_name}."
+                            )
+                    msg = "Saving transcript to '%s'" % TRANSCRIPT_PATH
                     logger.warning(msg)
                 with open(TRANSCRIPT_PATH, encoding="utf-8", mode="w") as f:
                     f.write(utt)

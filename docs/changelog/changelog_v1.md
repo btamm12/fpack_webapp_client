@@ -13,6 +13,18 @@ Group the changelog under the following headers for each release.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## `v1.0.1`
+
+**Title:** Fixed overwriting existing transcripts in v1.0.1 \
+**Release Date:** 2022-05-11
+
+### Changed
+- After the user finishes all segments, the program will generate a single transcript
+  .txt file (just as before). If there is a conflict, the program will now search for
+  a unique name instead of overwriting the previous transcript. This will prevent any
+  data loss.
+- Bumped version to v1.0.1
+
 ## `v1.0.0`
 
 **Title:** New installation procedure in v1 \
